@@ -217,13 +217,20 @@ def _stop(*_a):
 
 def run(sock_path: str | None = None) -> int:
     paths.ensure_dirs()
-    sp = Path(sock_path or paths.helper_socket())
+    # Path precedence: explicit arg, SQ_HELPER_SOCKET env (used by the systemd
+    # unit so the root daemon and the user client share a fixed path), else the
+    # per-user default.
+    sp = Path(sock_path or os.environ.get("SQ_HELPER_SOCKET") or paths.helper_socket())
+    sp.parent.mkdir(parents=True, exist_ok=True)
     if sp.exists():
         sp.unlink()
     srv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     srv.bind(str(sp))
-    # Owner rw only — the game runs as a single user.
-    os.chmod(sp, 0o600)
+    # When running as root (the normal case), the player's unprivileged `sq`
+    # must be able to connect, so the socket is world-rw. The fixed set of
+    # whitelisted ops — not socket perms — is the security boundary (§12).
+    # When unprivileged (dev/dry-run) keep it owner-only.
+    os.chmod(sp, 0o666 if os.geteuid() == 0 else 0o600)
     srv.listen(8)
     srv.settimeout(1.0)
     signal.signal(signal.SIGTERM, _stop)

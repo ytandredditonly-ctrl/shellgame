@@ -21,7 +21,10 @@ class HelperResult:
 
 
 def _socket_path() -> str:
-    return config.get("helper_socket") or paths.helper_socket()
+    import os
+    return (config.get("helper_socket")
+            or os.environ.get("SQ_HELPER_SOCKET")
+            or paths.helper_socket())
 
 
 def available() -> bool:
