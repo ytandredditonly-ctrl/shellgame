@@ -1,0 +1,12 @@
+id: l9-q02
+type: practice
+title: Найти эксплойт
+brief: 'По версии сервиса найди эксплойт (searchsploit) и сдай его EDB-ID: sq answer <id>.'
+requires_quests: [l9-q01]
+requires_packages: [exploitdb]
+validators:
+  - {type: command_used, any_of: [searchsploit]}
+  - {type: output_matches, regex: "^[0-9]+$"}
+hints:
+  - 'searchsploit <сервис> <версия>.'
+  - 'Идентификатор — в колонке EDB-ID/Path.'

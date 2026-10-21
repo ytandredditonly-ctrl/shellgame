@@ -1,0 +1,12 @@
+id: l4-q03
+type: practice
+title: Кто занял порт
+brief: 'Узнай, какой процесс на твоей машине слушает порт 8080 (ss), и сдай его имя: sq answer <имя>.'
+requires_quests: [l4-q01]
+validators:
+  - {type: command_used, any_of: [ss, lsof, netstat]}
+  - {type: output_matches, answer_sha256: "3ee0c325520726bf2ff0504b6c357ee65d61e8ba2dbfc63fd460a17cfa5ab482"}
+hints:
+  - 'Слушающие сокеты — ss -tlnp.'
+  - 'ss -tlnp | grep 8080'
+codex: codex/ss.md

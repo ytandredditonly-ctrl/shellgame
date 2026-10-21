@@ -1,0 +1,12 @@
+id: l0-q03
+type: tutorial
+title: Прочитать записку
+brief: "В ~/terminal/notes лежит welcome.txt. Прочитай его и сдай кодовое слово: sq answer <слово>."
+requires_quests: [l0-q02]
+validators:
+  - {type: command_used, any_of: [cat, less]}
+  - {type: output_matches, answer_sha256: "ab108947c59ced789ff6888abe143a92369b923dfadac02ba00d873346b4ae39", ci: true}
+hints:
+  - "Вывести файл целиком — cat."
+  - "cat ~/terminal/notes/welcome.txt — слово в последней строке."
+codex: codex/cat.md

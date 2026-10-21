@@ -1,0 +1,13 @@
+id: l4-q07
+type: combo
+title: Ключ вместо пароля
+brief: 'Сгенерируй SSH-ключ ed25519 в ~/.ssh (понадобится боссу).'
+requires_quests: [l4-q04]
+validators:
+  - {type: file_exists, path: ~/.ssh/id_ed25519}
+  - {type: file_exists, path: ~/.ssh/id_ed25519.pub}
+  - {type: file_mode, path: ~/.ssh/id_ed25519, mode: "600"}
+hints:
+  - 'ssh-keygen -t ed25519.'
+  - 'ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 (пароль можно пустой).'
+codex: codex/ssh.md

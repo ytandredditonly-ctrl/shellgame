@@ -1,0 +1,12 @@
+id: l4-q04
+type: practice
+title: Постучаться в веб
+brief: 'У gatekeeper на 8080 отвечает веб-сервис. Забери главную (curl) и сдай слово из заголовка: sq answer <слово>.'
+requires_quests: [l4-q02]
+validators:
+  - {type: command_used, any_of: [curl, wget]}
+  - {type: output_matches, answer_sha256: "280d44ab1e9f79b5cce2dd4f58f5fe91f0fbacdac9f7447dffc318ceb79f2d02", ci: true}
+hints:
+  - 'curl http://<host>:8080/.'
+  - 'curl $SQ_ARENA_HOST:8080 — слово в h1.'
+codex: codex/curl.md

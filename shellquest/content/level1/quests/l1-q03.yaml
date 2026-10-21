@@ -1,0 +1,11 @@
+id: l1-q03
+type: practice
+title: Запереть файл
+brief: "Сделай ~/terminal/notes/private.txt доступным для чтения/записи только владельцу (режим 600)."
+requires_quests: [l1-q02]
+validators:
+  - {type: file_mode, path: ~/terminal/notes/private.txt, mode: "600"}
+hints:
+  - "Права — chmod, нужно ровно 600."
+  - "chmod 600 ~/terminal/notes/private.txt"
+codex: codex/chmod.md

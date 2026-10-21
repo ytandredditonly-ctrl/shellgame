@@ -1,0 +1,10 @@
+id: l8-q05
+type: practice
+title: Несколько хешей
+brief: 'Подбери пароли ко всем хешам в hashes.txt и сдай число взломанных: sq answer <n>.'
+requires_quests: [l8-q04]
+validators:
+  - {type: output_matches, regex: "^[0-9]+$"}
+hints:
+  - 'Тот же john по всему файлу.'
+  - 'john --show посчитает взломанные.'

@@ -1,0 +1,18 @@
+id: 7
+name: Паутина
+unlock_packages: []
+target_commands: [nikto, sqlmap, ffuf, curl, gobuster]
+command_threshold: 0.7
+xp_required: 600
+shop:
+  - {name: nikto, package: nikto, price: 80, desc: "Сканер веб-уязвимостей"}
+  - {name: sqlmap, package: sqlmap, price: 140, desc: "Автоматизация SQL-инъекций"}
+  - {name: ffuf, package: ffuf, price: 80, desc: "Быстрый веб-фаззер"}
+  - {name: burpsuite, package: burpsuite, price: 150, desc: "Перехватывающий прокси (из набора Kali)"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Сеть вывела к веб-приложению Архитектора «juicebox». В его коде — дыры.
+  Войди через них. ВАЖНО: цель — локальный учебный контейнер без выхода наружу.
+story_outro: >-
+  Приложение пройдено насквозь — от формы входа до базы. Секреты Архитектора твои.

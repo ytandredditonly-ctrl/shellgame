@@ -1,0 +1,13 @@
+name: sq-level5
+networks:
+  sqlab:
+    internal: true
+services:
+  attacker:
+    build: ./attacker
+    container_name: sq-attacker
+    hostname: attacker
+    networks: { sqlab: { aliases: [attacker.lab] } }
+    # TARGET is the player's host IP on the lab net; set by sq-helperd at arena_up.
+    environment:
+      TARGET: ${SQ_TARGET_HOST:-host.lab}

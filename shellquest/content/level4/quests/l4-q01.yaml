@@ -1,0 +1,11 @@
+id: l4-q01
+type: tutorial
+title: Карта интерфейсов
+brief: 'Узнай IP своей машины (ip a) и сдай адрес на eth*/ens*: sq answer <ip>.'
+validators:
+  - {type: command_used, any_of: [ip]}
+  - {type: output_matches, regex: "^\\d+\\.\\d+\\.\\d+\\.\\d+$"}
+hints:
+  - 'Адреса — ip a.'
+  - 'Блок eth0/ens*, адрес после inet.'
+codex: codex/ip.md

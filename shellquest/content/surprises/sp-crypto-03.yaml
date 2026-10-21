@@ -1,0 +1,18 @@
+id: sp-crypto-03
+track: crypto
+min_level: 1
+requires_packages: []
+title: Подмена в архиве
+story: Кто-то тронул один из файлов. Рядом лежит список контрольных сумм.
+brief: "В ~/sq-drop/files/ лежат файлы и SHA256SUMS. Один файл подменён. Найди его и сдай имя: sq answer <имя>."
+params:
+  name: random_name
+validators:
+  - {type: command_used, any_of: [sha256sum, md5sum]}
+  - {type: output_matches, answer_sha256: "{{ params.name | sha256 }}"}
+hints:
+  - "Проверка целостности по списку — sha256sum -c SHA256SUMS."
+  - "cd ~/sq-drop/files && sha256sum -c SHA256SUMS  — ищи строку FAILED."
+setup: scripts/sp-crypto-03-setup.sh
+teardown: scripts/sp-crypto-03-teardown.sh
+codex: codex/sp-crypto-03.md

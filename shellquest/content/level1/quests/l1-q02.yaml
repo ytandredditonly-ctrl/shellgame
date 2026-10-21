@@ -1,0 +1,12 @@
+id: l1-q02
+type: tutorial
+title: Чей это файл
+brief: "У ~/terminal/archive/secret.log есть владелец. Узнай его имя (ls -l / stat) и сдай: sq answer <имя>."
+requires_quests: [l1-q01]
+validators:
+  - {type: command_used, any_of: [ls, stat]}
+  - {type: script, path: check-owner.py}
+hints:
+  - "Длинный список — ls -l, владелец в третьей колонке."
+  - "ls -l ~/terminal/archive/secret.log  или  stat ~/terminal/archive/secret.log"
+codex: codex/chown.md

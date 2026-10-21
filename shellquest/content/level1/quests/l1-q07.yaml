@@ -1,0 +1,11 @@
+id: l1-q07
+type: tutorial
+title: Маска по умолчанию
+brief: "Узнай текущий umask своей оболочки и сдай его: sq answer <маска> (например 0022)."
+requires_quests: [l1-q01]
+validators:
+  - {type: command_used, any_of: [umask]}
+  - {type: script, path: check-umask.py}
+hints:
+  - "Просто umask без аргументов."
+  - "Введи значение как есть, например 0022 или 022."

@@ -1,0 +1,10 @@
+id: l4-q05
+type: practice
+title: Разрешить имя
+brief: 'Узнай IP имени gatekeeper.lab внутри сети (dig/getent) и сдай его: sq answer <ip>.'
+requires_quests: [l4-q02]
+validators:
+  - {type: output_matches, regex: "^\\d+\\.\\d+\\.\\d+\\.\\d+$"}
+hints:
+  - 'dig +short gatekeeper.lab; без dig — getent hosts.'
+  - 'dig +short gatekeeper.lab @$SQ_DNS'

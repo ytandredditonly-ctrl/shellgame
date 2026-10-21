@@ -1,0 +1,30 @@
+id: l6-boss
+name: Картограф
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Составь полную карту сети Архитектора: кто живой, что открыто, где слабое место.
+phases:
+  - id: p1
+    brief: 'Сдай число живых хостов: sq answer <n>.'
+    validators:
+      - {type: output_matches, regex: "^[0-9]+$"}
+    hints:
+      - 'nmap -sn по всей подсети.'
+      - "Считай строки 'Host is up'."
+  - id: p2
+    brief: 'Собери карту портов по всем хостам (script сверит с эталоном арены).'
+    validators:
+      - {type: script, path: check-portmap.py}
+    hints:
+      - "Просканируй каждый хост nmap'ом."
+      - "Эталон сверяется helper'ом арены."
+  - id: p3
+    brief: 'Найди хост с устаревшим сервисом и спрятанный на нём флаг: sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "4e65961113f543c1e1b7c0c49168f0d99031d67704991387d58a1f70c2b1e264"}
+    hints:
+      - 'Устаревшую версию покажет nmap -sV.'
+      - 'Флаг — в баннере/на странице этого хоста.'

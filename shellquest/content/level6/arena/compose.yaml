@@ -1,0 +1,22 @@
+name: sq-level6
+networks:
+  sqlab:
+    internal: true
+services:
+  web:
+    build: ./web
+    container_name: sq-web
+    hostname: web
+    networks: { sqlab: { aliases: [web.lab] } }
+    expose: ["80","8443"]
+  db:
+    build: ./db
+    container_name: sq-db
+    hostname: db
+    networks: { sqlab: { aliases: [db.lab] } }
+    expose: ["5432"]
+  misc:
+    build: ./misc
+    container_name: sq-misc
+    hostname: misc
+    networks: { sqlab: { aliases: [misc.lab] } }

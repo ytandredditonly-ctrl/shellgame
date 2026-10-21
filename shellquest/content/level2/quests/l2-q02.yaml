@@ -1,0 +1,10 @@
+id: l2-q02
+type: tutorial
+title: Что жрёт ресурсы
+brief: "Открой интерактивный монитор (top/htop) и закрой его (q). Задание засчитает факт запуска."
+requires_quests: [l2-q01]
+validators:
+  - {type: command_used, any_of: [top, htop]}
+hints:
+  - "top, выход — q."
+  - "htop удобнее (можно купить в sq shop), но top есть всегда."

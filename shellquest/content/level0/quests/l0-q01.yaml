@@ -1,0 +1,12 @@
+id: l0-q01
+type: tutorial
+title: Осмотреться
+brief: "Узнай, где ты находишься, и посмотри, что вокруг. Выполни pwd и ls."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [pwd]}
+  - {type: command_used, any_of: [ls]}
+hints:
+  - "«Где я?» — одна команда покажет текущий путь."
+  - "Сначала pwd, затем ls."
+codex: codex/ls.md

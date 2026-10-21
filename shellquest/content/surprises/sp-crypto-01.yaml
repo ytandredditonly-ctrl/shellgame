@@ -1,0 +1,17 @@
+id: sp-crypto-01
+track: crypto
+min_level: 0
+requires_packages: []
+title: Записка в base64
+story: Архитектор оставил записку, но «спрятал» её — скорее по привычке, чем всерьёз.
+brief: "В ~/sq-drop/note.b64 лежит закодированная строка. Раскодируй её и сдай флаг изнутри: sq flag <значение>."
+params:
+  flag: random_flag
+validators:
+  - {type: flag, sha256: "{{ params.flag | sha256 }}"}
+hints:
+  - "base64 — это кодирование, а не шифрование. Его можно просто раскодировать."
+  - "base64 -d ~/sq-drop/note.b64"
+setup: scripts/sp-crypto-01-setup.sh
+teardown: scripts/sp-crypto-01-teardown.sh
+codex: codex/sp-crypto-01.md

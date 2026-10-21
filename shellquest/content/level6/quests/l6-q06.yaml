@@ -1,0 +1,12 @@
+id: l6-q06
+type: combo
+title: Скрытые пути
+brief: 'Перебором директорий найди скрытую страницу на web и сдай её путь: sq answer <путь>.'
+requires_quests: [l6-q04]
+requires_packages: [gobuster]
+validators:
+  - {type: command_used, any_of: [gobuster, ffuf, dirb]}
+  - {type: output_matches, answer_sha256: "2d5dec6656d6fc02f6b56c2bb8262d7ca0d658cbd3a1f6ccd70ec7bb02454b76"}
+hints:
+  - 'gobuster dir -u http://web -w <wordlist>.'
+  - 'Код 200/301 у найденного пути.'

@@ -1,0 +1,11 @@
+id: l3-q06
+type: tutorial
+title: Поставить инструмент
+brief: "Проверь статус пакета tree и сдай его версию: sq answer <версия> (или none, если не стоит)."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [dpkg, apt, apt-cache]}
+  - {type: script, path: check-tree.py}
+hints:
+  - "Статус пакета — dpkg -s tree."
+  - "dpkg -s tree | grep Version  (нет пакета -> сдай none)"

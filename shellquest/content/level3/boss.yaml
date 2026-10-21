@@ -1,0 +1,31 @@
+id: l3-boss
+name: Поток
+arena: null
+time_limit: null
+hints_enabled: true
+story_brief: >-
+  Архитектор оставил лог инцидента ~/terminal/logs/incident.log. Разбери его
+  одним конвейером и достань спрятанный в данных ключ.
+phases:
+  - id: p1
+    brief: "Сдай число запросов со статусом 500: sq answer <число>."
+    validators:
+      - {type: command_used, any_of: [awk, grep, wc]}
+      - {type: output_matches, answer_sha256: "d7cdaa5ca0582076c8e772cce739e32c5077cfd24f2ea33f04bb754594989a56"}
+    hints:
+      - "Фильтр по третьему полю == 500, затем wc -l."
+      - "awk '$3==500' incident.log | wc -l"
+  - id: p2
+    brief: "Найди час суток с максимумом запросов и сдай его (две цифры): sq answer <ЧЧ>."
+    validators:
+      - {type: output_matches, answer_sha256: "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278"}
+    hints:
+      - "Час — во втором поле после T. Вырежи его, посчитай, отсортируй."
+      - "awk '{print $2}' incident.log | cut -dT -f2 | cut -d: -f1 | sort | uniq -c | sort -nr | head"
+  - id: p3
+    brief: "В одной строке User-Agent спрятан KEY=<...>. Извлеки и сдай: sq flag <ключ>."
+    validators:
+      - {type: flag, sha256: "88c36756df4d9ef55c90cc381ed9ff32c7f949be7b9c7f97a5ddc95530f875e8"}
+    hints:
+      - "Грепни по KEY= и вырежи значение."
+      - "grep -o 'KEY=[^\" ]*' incident.log | cut -d= -f2"

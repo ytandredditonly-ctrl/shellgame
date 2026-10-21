@@ -1,0 +1,11 @@
+id: l0-q02
+type: tutorial
+title: Войти в Терминал
+brief: "Всё хранилось в папке ~/terminal. Зайди в неё (cd) и осмотрись (ls)."
+requires_quests: [l0-q01]
+validators:
+  - {type: script, path: check-in-terminal.py}
+  - {type: command_used, any_of: [ls]}
+hints:
+  - "Сменить папку — cd."
+  - "cd ~/terminal && ls"

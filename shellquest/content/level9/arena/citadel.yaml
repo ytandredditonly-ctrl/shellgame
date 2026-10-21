@@ -1,0 +1,12 @@
+# Level 9 arena — «citadel» vulnerable target VM/container. Isolated network.
+name: sq-level9
+networks:
+  sqlab:
+    internal: true
+services:
+  citadel:
+    build: ./citadel
+    container_name: sq-citadel
+    hostname: citadel
+    networks: { sqlab: { aliases: [citadel.lab] } }
+    expose: ["22", "8080"]

@@ -1,0 +1,12 @@
+id: l6-q02
+type: practice
+title: Открытые порты
+brief: 'Просканируй хост web и сдай единственный нестандартный открытый порт (не 80/443): sq answer <порт>.'
+requires_quests: [l6-q01]
+requires_packages: [nmap]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, regex: "^[0-9]+$"}
+hints:
+  - 'nmap <host>.'
+  - 'Нестандартный — не 80 и не 443.'

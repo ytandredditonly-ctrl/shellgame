@@ -1,0 +1,10 @@
+id: l5-q01
+type: tutorial
+title: Кто ломился
+brief: 'В auth.log есть неудачные входы по SSH. Сдай IP, с которого их больше всего: sq answer <ip>.'
+validators:
+  - {type: command_used, any_of: [grep, awk, sort, uniq]}
+  - {type: output_matches, regex: "^\\d+\\.\\d+\\.\\d+\\.\\d+$"}
+hints:
+  - "grep 'Failed password' /var/log/auth.log."
+  - 'Вырежи IP -> sort -> uniq -c -> sort -nr.'

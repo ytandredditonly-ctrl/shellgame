@@ -1,0 +1,13 @@
+[Unit]
+Description=shellquest background daemon (unprivileged)
+After=default.target
+
+[Service]
+Type=simple
+# Adjust ExecStart to your checkout if you did not `pip install .`.
+ExecStart=%h/.local/bin/sq-daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

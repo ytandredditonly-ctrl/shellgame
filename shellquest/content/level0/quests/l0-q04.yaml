@@ -1,0 +1,11 @@
+id: l0-q04
+type: practice
+title: Навести порядок
+brief: "Создай папку ~/terminal/backup и скопируй в неё welcome.txt."
+requires_quests: [l0-q02]
+validators:
+  - {type: file_exists, path: ~/terminal/backup}
+  - {type: file_exists, path: ~/terminal/backup/welcome.txt}
+hints:
+  - "Папка — mkdir, копия — cp."
+  - "mkdir ~/terminal/backup && cp ~/terminal/notes/welcome.txt ~/terminal/backup/"

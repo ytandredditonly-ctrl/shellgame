@@ -1,0 +1,12 @@
+id: l3-q05
+type: practice
+title: Замена в тексте
+brief: "Создай ~/terminal/logs/clean.log, где все ERROR заменены на WARN (число строк не меняется)."
+requires_quests: [l3-q01]
+validators:
+  - {type: command_used, any_of: [sed, tr, awk]}
+  - {type: script, path: check-clean.py}
+hints:
+  - "Потоковая замена — sed 's/ERROR/WARN/g'."
+  - "sed 's/ERROR/WARN/g' access.log > clean.log"
+codex: codex/sed.md

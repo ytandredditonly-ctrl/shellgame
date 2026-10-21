@@ -1,0 +1,17 @@
+id: 8
+name: Шифр
+unlock_packages: []
+target_commands: [openssl, gpg, john, hashcat, hashid, sha256sum]
+command_threshold: 0.7
+xp_required: 680
+shop:
+  - {name: john, package: john, price: 120, desc: "John the Ripper — подбор паролей"}
+  - {name: hashcat, package: hashcat, price: 160, desc: "GPU-подбор хешей"}
+  - {name: hashid, package: hashid, price: 40, desc: "Определение типа хеша"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Архитектор всё шифровал. Чтобы прочитать его записи, придётся вскрывать замки.
+  ВАЖНО: все хеши и архивы учебные, пароли слабые и берутся из прилагаемого словаря.
+story_outro: >-
+  Последний сейф Архитектора открыт. То, что внутри, объясняет почти всё.

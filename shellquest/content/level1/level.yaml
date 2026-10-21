@@ -1,0 +1,15 @@
+id: 1
+name: Хранители
+unlock_packages: []
+target_commands: [id, sudo, useradd, chmod, chown, umask, stat, find]
+command_threshold: 0.8
+xp_required: 220
+shop: []
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Терминал открыт всем ветрам. Разберись, кто и что тут может, и закрой
+  лишние двери: права, владельцы, маски.
+story_outro: >-
+  Двери заперты, лишние ключи отобраны. За одной из брешей Архитектор
+  прятал подсказку — ты её забрал.

@@ -1,0 +1,19 @@
+[Unit]
+Description=shellquest privileged helper (fixed operation set)
+Documentation=man:shellquest
+After=network.target
+
+[Service]
+Type=simple
+# Runs as root: performs ONLY the whitelisted ops in sq/helperd.py over a
+# Unix socket. Adjust ExecStart to your install (pip -> /usr/local/bin).
+ExecStart=/usr/local/bin/sq-helperd
+Restart=on-failure
+RestartSec=5
+# Hardening: the helper needs apt + docker; keep the rest locked down.
+NoNewPrivileges=false
+ProtectHome=false
+ProtectSystem=false
+
+[Install]
+WantedBy=multi-user.target

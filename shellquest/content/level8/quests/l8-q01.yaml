@@ -1,0 +1,10 @@
+id: l8-q01
+type: tutorial
+title: Что за хеш
+brief: 'Определи тип первого хеша в ~/terminal/crypto/hashes.txt (hashid) и сдай алгоритм: sq answer <алгоритм>.'
+requires_packages: [hashid]
+validators:
+  - {type: output_matches, regex: "^[a-zA-Z0-9_-]+$"}
+hints:
+  - "hashid '<хеш>'."
+  - 'Самый вероятный вариант — сверху.'

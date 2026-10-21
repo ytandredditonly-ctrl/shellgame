@@ -1,0 +1,14 @@
+# Level 7 arena — intentionally vulnerable web app. Isolated, training only.
+name: sq-level7
+networks:
+  sqlab:
+    internal: true
+services:
+  juicebox:
+    build: ./juicebox
+    container_name: sq-juicebox
+    hostname: juicebox
+    networks:
+      sqlab:
+        aliases: [juicebox.lab]
+    expose: ["80"]

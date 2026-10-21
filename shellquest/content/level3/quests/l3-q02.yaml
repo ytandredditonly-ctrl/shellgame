@@ -1,0 +1,12 @@
+id: l3-q02
+type: tutorial
+title: Вырезать колонку
+brief: "Выведи только первое поле (IP) и сдай, сколько всего строк в логе: sq answer <число>."
+requires_quests: [l3-q01]
+validators:
+  - {type: command_used, any_of: [cut, awk]}
+  - {type: output_matches, answer_sha256: "81a83544cf93c245178cbc1620030f1123f435af867c79d87135983c52ab39d9"}
+hints:
+  - "Поле по пробелу — cut -d' ' -f1 или awk '{print $1}'."
+  - "awk '{print $1}' access.log | wc -l"
+codex: codex/cut.md

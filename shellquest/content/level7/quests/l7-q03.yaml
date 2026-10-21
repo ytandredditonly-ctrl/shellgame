@@ -1,0 +1,12 @@
+id: l7-q03
+type: practice
+title: Проверка на SQLi
+brief: 'Проверь форму логина на SQL-инъекцию (sqlmap) и сдай имя уязвимого параметра: sq answer <имя>.'
+requires_quests: [l7-q02]
+requires_packages: [sqlmap]
+validators:
+  - {type: command_used, any_of: [sqlmap]}
+  - {type: output_matches, regex: "^[a-zA-Z0-9_-]+$"}
+hints:
+  - "sqlmap -u <url> --data '...' --batch."
+  - 'sqlmap отметит уязвимый параметр.'

@@ -1,0 +1,15 @@
+id: 2
+name: Нутро
+unlock_packages: []
+target_commands: [ps, top, kill, pkill, systemctl, journalctl, crontab, grep]
+command_threshold: 0.75
+xp_required: 260
+shop:
+  - {name: htop, package: htop, price: 30, desc: "Удобный интерактивный монитор процессов"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Терминал живёт своей жизнью: какие-то процессы работают сами по себе.
+  Пора заглянуть внутрь — процессы, службы, журналы, автозапуск.
+story_outro: >-
+  Нежить обезврежена, автозапуск вычищен. Терминал снова отвечает только тебе.

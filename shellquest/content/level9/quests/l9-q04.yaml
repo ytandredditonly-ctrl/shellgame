@@ -1,0 +1,10 @@
+id: l9-q04
+type: practice
+title: User-флаг
+brief: 'Найди и сдай user-флаг из домашней папки пользователя: sq flag <значение>.'
+requires_quests: [l9-q03]
+validators:
+  - {type: flag, sha256: "60bb40f42977b579d00932375e219d778bbb56e5940130dbc6eb190c5ee96401"}
+hints:
+  - 'find /home -name user.txt.'
+  - 'cat найденного файла.'

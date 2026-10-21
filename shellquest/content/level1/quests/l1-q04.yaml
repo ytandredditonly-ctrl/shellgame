@@ -1,0 +1,10 @@
+id: l1-q04
+type: practice
+title: Сделать исполняемым
+brief: "Скрипт ~/terminal/bin/run.sh не запускается. Дай ему право на исполнение."
+requires_quests: [l1-q02]
+validators:
+  - {type: script, path: check-exec.py}
+hints:
+  - "Исполняемость — chmod +x."
+  - "chmod +x ~/terminal/bin/run.sh"

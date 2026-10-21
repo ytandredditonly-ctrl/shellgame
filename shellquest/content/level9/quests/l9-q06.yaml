@@ -1,0 +1,11 @@
+id: l9-q06
+type: combo
+title: Повысить привилегии
+brief: 'Используй найденный вектор, стань root и сдай root-флаг из /root: sq flag <значение>.'
+requires_quests: [l9-q05]
+validators:
+  - {type: script, path: check-root.py}
+  - {type: flag, sha256: "647583ec177a753c5768a85e863910071e0b2cac4529aa39588461fe26d669a9"}
+hints:
+  - 'Проэксплуатируй вектор из q05.'
+  - 'После id с uid=0 — cat /root/root.txt.'

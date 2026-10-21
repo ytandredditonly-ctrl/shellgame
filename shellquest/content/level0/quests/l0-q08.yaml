@@ -1,0 +1,10 @@
+id: l0-q08
+type: tutorial
+title: Прочитать мануал
+brief: "Открой справку по find (man find) и закрой её (q)."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [man]}
+hints:
+  - "Встроенная справка — man <команда>, выход — q."
+  - "man find"

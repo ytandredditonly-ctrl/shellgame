@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shellquest"
+version = "0.1.0"
+description = "shellquest — Kali Linux as an RPG (MVP-0 engine + CLI)"
+requires-python = ">=3.11"
+dependencies = ["PyYAML>=6"]
+
+[project.scripts]
+sq = "sq.cli:main"
+sq-daemon = "sq.daemon:run"
+sq-helperd = "sq.helperd:run"
+
+[tool.setuptools]
+packages = ["sq", "sq.validators"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+# Content ships with the package.
+"*" = ["content/**/*"]

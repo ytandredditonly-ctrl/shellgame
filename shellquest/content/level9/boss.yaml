@@ -1,0 +1,31 @@
+id: l9-boss
+name: Архитектор?
+arena: arena/citadel.yaml
+time_limit: null
+hints_enabled: false
+hint_multiplier: 2.0
+story_brief: >-
+  Никаких подсказок по шагам. Пройди машину целиком: войди, закрепись, стань root. На финале ты узнаешь, кто был по ту сторону.
+phases:
+  - id: p1
+    brief: 'Доступ: получи любой непривилегированный шелл на citadel.'
+    validators:
+      - {type: script, path: check-session.py}
+    hints:
+      - 'Разведка -> эксплойт -> шелл.'
+      - 'Всё как в заданиях уровня, но без шагов.'
+  - id: p2
+    brief: 'User: сдай user-флаг. sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "60bb40f42977b579d00932375e219d778bbb56e5940130dbc6eb190c5ee96401"}
+    hints:
+      - 'user.txt в домашней папке.'
+      - 'find /home -name user.txt'
+  - id: p3
+    brief: 'Root: повысь привилегии и сдай root-флаг. sq flag <значение>.'
+    validators:
+      - {type: script, path: check-root.py}
+      - {type: flag, sha256: "647583ec177a753c5768a85e863910071e0b2cac4529aa39588461fe26d669a9"}
+    hints:
+      - 'Вектор локального повышения — linpeas.'
+      - 'cat /root/root.txt после uid=0.'

@@ -1,0 +1,10 @@
+id: l6-q04
+type: practice
+title: Веб-отпечаток
+brief: 'Определи движок сайта web:80 (whatweb/curl -I) и сдай название: sq answer <движок>.'
+requires_quests: [l6-q02]
+validators:
+  - {type: output_matches, regex: "^[a-zA-Z0-9_.-]+$"}
+hints:
+  - 'whatweb http://web/ или curl -I.'
+  - 'Смотри заголовок Server.'

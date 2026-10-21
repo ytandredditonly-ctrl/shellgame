@@ -1,0 +1,13 @@
+id: l5-q05
+type: combo
+title: Поймать брутфорс
+brief: 'Настрой fail2ban: после нескольких неудачных входов SSH банить IP. Сдай имя джейла: sq answer <джейл>.'
+requires_quests: [l5-q01, l5-q02]
+validators:
+  - {type: service_active, unit: fail2ban}
+  - {type: script, path: check-jail.py}
+  - {type: output_matches, answer_sha256: "8b51ac5ca03b0a599e3951a7825c5e6028b62a6c82c9565b3d6a3660d2c7fd00"}
+hints:
+  - 'Включи джейл sshd в jail.local и запусти службу.'
+  - 'fail2ban-client status sshd покажет активный джейл.'
+codex: codex/fail2ban.md

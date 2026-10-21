@@ -1,0 +1,18 @@
+# Level 4 arena — brought up by sq-helperd. Isolated network, no outbound.
+name: sq-level4
+networks:
+  sqlab:
+    internal: true
+services:
+  gatekeeper:
+    build: ./gatekeeper
+    container_name: sq-gatekeeper
+    hostname: gatekeeper
+    networks:
+      sqlab:
+        aliases: [gatekeeper.lab]
+    # The player's public key from l4-q07 is mounted read-only and installed
+    # into root's authorized_keys by the entrypoint, so the boss SSH phase works.
+    volumes:
+      - ${HOME}/.ssh/id_ed25519.pub:/opt/player_key.pub:ro
+    expose: ["22", "8080", "9000"]

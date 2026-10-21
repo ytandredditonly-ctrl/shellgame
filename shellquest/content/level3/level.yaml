@@ -1,0 +1,15 @@
+id: 3
+name: Конвейер
+unlock_packages: []
+target_commands: [head, cut, awk, sort, uniq, sed, grep, wc, bash, dpkg]
+command_threshold: 0.8
+xp_required: 300
+shop:
+  - {name: jq, package: jq, price: 40, desc: "JSON-процессор для необязательного задания"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Данных много, руками не разберёшь. Научись гонять их по конвейеру из команд:
+  вырезать, фильтровать, считать, заменять.
+story_outro: >-
+  Поток укрощён. В шуме данных Архитектора нашёлся спрятанный ключ — ты его достал.

@@ -1,0 +1,11 @@
+id: l3-q07
+type: combo
+title: Скрипт-отчёт
+brief: "Напиши ~/terminal/logs/report.sh, печатающий две строки — число 404 и топ-IP — и запусти его."
+requires_quests: [l3-q03, l3-q04]
+validators:
+  - {type: command_used, any_of: [bash, sh, chmod]}
+  - {type: script, path: check-report.py}
+hints:
+  - "Собери пайплайны из q03 и q04 в один .sh со #!/bin/bash."
+  - "Не забудь chmod +x report.sh; проверка запускает его сама."

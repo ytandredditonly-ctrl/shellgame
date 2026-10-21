@@ -1,0 +1,10 @@
+id: l5-q04
+type: practice
+title: Политика по умолчанию
+brief: 'Поставь политику: входящие — запрещать, исходящие — разрешать (оставь allow 22).'
+requires_quests: [l5-q02]
+validators:
+  - {type: script, path: check-default-policy.py}
+hints:
+  - 'ufw default deny incoming; ufw default allow outgoing.'
+  - 'Не забудь оставить allow 22/tcp.'

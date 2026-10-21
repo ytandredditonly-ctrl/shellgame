@@ -1,0 +1,11 @@
+id: l9-q03
+type: combo
+title: Получить доступ
+brief: 'Используй эксплойт и получи шелл на citadel. Сдай имя пользователя, под которым оказался: sq answer <user>.'
+requires_quests: [l9-q02]
+validators:
+  - {type: script, path: check-session.py}
+  - {type: output_matches, regex: "^[a-zA-Z0-9_-]+$"}
+hints:
+  - 'В msfconsole: search, use, RHOSTS, run.'
+  - 'Вручную — реверс-шелл на твой nc -lvnp <порт>.'

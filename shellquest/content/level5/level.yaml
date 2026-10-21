@@ -1,0 +1,17 @@
+id: 5
+name: Крепость
+unlock_packages: []
+target_commands: [ufw, nft, fail2ban-client, systemctl, grep, awk, ss]
+command_threshold: 0.75
+xp_required: 460
+shop:
+  - {name: ufw, package: ufw, price: 60, desc: "Простой фронтенд к firewall"}
+  - {name: fail2ban, package: fail2ban, price: 100, desc: "Автобан по журналам аутентификации"}
+  - {name: auditd, package: auditd, price: 80, desc: "Аудит системных событий"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  За тобой уже наблюдают. Укрепи Терминал, пока в дверь не вошли: firewall,
+  политики по умолчанию, автобан брутфорса.
+story_outro: >-
+  Осада отражена. Бот Архитектора бьётся в закрытую дверь — и больше не проходит.

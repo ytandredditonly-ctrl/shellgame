@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.eggs/
+build/
+dist/
+*.db
+*.db-wal
+*.db-shm
+.sq-*.pid

@@ -1,0 +1,32 @@
+id: l4-boss
+name: Привратник
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Настрой безопасный доступ и проникни в оставленную Архитектором машину-привратник.
+phases:
+  - id: p1
+    brief: 'Подними SSH на нестандартном порту (не 22).'
+    validators:
+      - {type: service_active, unit: ssh}
+      - {type: port_listening, port_not: 22}
+    hints:
+      - 'Поменяй Port в /etc/ssh/sshd_config и перезапусти ssh.'
+      - 'sudo systemctl restart ssh'
+  - id: p2
+    brief: 'Разреши вход только по ключу (PasswordAuthentication no).'
+    validators:
+      - {type: file_contains, path: /etc/ssh/sshd_config, regex: "^PasswordAuthentication no"}
+      - {type: service_active, unit: ssh}
+    hints:
+      - 'Правка sshd_config, затем перезапуск.'
+      - 'PasswordAuthentication no'
+  - id: p3
+    brief: 'Войди по SSH в gatekeeper и забери флаг из /root/flag.txt: sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "00c238e82457e44672c128bb5a28d3e1c5c3b1cb51f61cf3ffa30587bb1fb8d1"}
+    hints:
+      - "Ключ из l4-q07 прописан в арене setup'ом."
+      - 'ssh -i ~/.ssh/id_ed25519 root@gatekeeper'

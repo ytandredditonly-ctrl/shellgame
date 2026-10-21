@@ -1,0 +1,12 @@
+id: l7-q04
+type: practice
+title: Фаззинг параметра
+brief: 'Найди скрытый GET-параметр на /search (ffuf) и сдай его имя: sq answer <имя>.'
+requires_quests: [l7-q01]
+requires_packages: [ffuf]
+validators:
+  - {type: command_used, any_of: [ffuf]}
+  - {type: output_matches, answer_sha256: "0b8e9e995d8d77f1e4770f0f79665aee6f3f70247b3735422daba73df4c3096f"}
+hints:
+  - "ffuf -u 'http://juicebox/search?FUZZ=1' -w <wordlist>."
+  - 'Отличие по длине/коду ответа.'

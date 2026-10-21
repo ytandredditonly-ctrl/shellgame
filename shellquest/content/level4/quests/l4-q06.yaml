@@ -1,0 +1,11 @@
+id: l4-q06
+type: combo
+title: Короткий разговор
+brief: 'Подключись к gatekeeper на 9000 (nc), отправь ping, прочитай ответ и сдай его: sq answer <ответ>.'
+requires_quests: [l4-q03, l4-q04]
+validators:
+  - {type: command_used, any_of: [nc, ncat]}
+  - {type: output_matches, answer_sha256: "eb6026f32dfce78547a3deb7b7b23adc53250cf070284a60f8a489c15cb32bb1"}
+hints:
+  - 'nc <host> 9000, затем набери ping.'
+  - 'echo ping | nc $SQ_ARENA_HOST 9000'

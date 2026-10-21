@@ -1,0 +1,10 @@
+id: l1-q05
+type: practice
+title: Новый житель
+brief: "Создай системного пользователя sq-guest с домашней папкой (нужен sudo)."
+requires_quests: [l1-q01]
+validators:
+  - {type: user_exists, name: sq-guest}
+hints:
+  - "Создание пользователя — useradd под sudo, ключ -m даёт домашнюю папку."
+  - "sudo useradd -m sq-guest"

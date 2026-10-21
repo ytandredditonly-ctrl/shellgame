@@ -1,0 +1,17 @@
+id: sp-crypto-02
+track: crypto
+min_level: 0
+requires_packages: []
+title: Сдвинутая записка
+story: Архитектор любил старые шифры. Эта записка «съехала» на 13 букв.
+brief: "~/sq-drop/rot.txt зашифрована ROT13. Расшифруй и сдай флаг: sq flag <значение>."
+params:
+  flag: random_flag
+validators:
+  - {type: flag, sha256: "{{ params.flag | sha256 }}"}
+hints:
+  - "ROT13 — подстановка со сдвигом 13; обратима тем же сдвигом."
+  - "tr 'A-Za-z' 'N-ZA-Mn-za-m' < ~/sq-drop/rot.txt"
+setup: scripts/sp-crypto-02-setup.sh
+teardown: scripts/sp-crypto-02-teardown.sh
+codex: codex/sp-crypto-02.md

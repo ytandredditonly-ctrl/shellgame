@@ -1,0 +1,12 @@
+id: l2-q06
+type: combo
+title: Кто в расписании
+brief: "Есть cron-задача, запускающая что-то каждую минуту. Найди её и сдай имя скрипта: sq answer <имя>."
+requires_quests: [l2-q05]
+validators:
+  - {type: command_used, any_of: [crontab, cat, grep, ls]}
+  - {type: output_matches, answer_sha256: "4cbfc2d4a74f0fd94646fdfd87b1d7d9c7802c55dc137563687a4df0af7ab617"}
+hints:
+  - "Смотри crontab -l, /etc/crontab, /etc/cron.d/."
+  - "grep -r revive /etc/cron*"
+codex: codex/cron.md

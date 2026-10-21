@@ -1,0 +1,19 @@
+id: 6
+name: Разведка
+unlock_packages: []
+target_commands: [nmap, tcpdump, tshark, whatweb, gobuster, curl]
+command_threshold: 0.7
+xp_required: 520
+shop:
+  - {name: nmap, package: nmap, price: 120, desc: "Сканер сети/портов/версий"}
+  - {name: tcpdump, package: tcpdump, price: 60, desc: "Захват пакетов"}
+  - {name: tshark, package: tshark, price: 100, desc: "CLI-анализатор трафика"}
+  - {name: whatweb, package: whatweb, price: 60, desc: "Отпечаток веб-технологий"}
+  - {name: gobuster, package: gobuster, price: 80, desc: "Перебор директорий/файлов"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Начало Акта II. След Архитектора ведёт в сеть, которую он спрятал. Сначала
+  осмотрись, не поднимая шума. Все хосты — локальные контейнеры арены.
+story_outro: >-
+  Карта сети составлена. Ты знаешь, где у Архитектора самое слабое место.

@@ -1,0 +1,12 @@
+id: l0-q07
+type: combo
+title: Найти иголку
+brief: "Где-то в ~/terminal спрятан файл со строкой PASS=. Найди значение после = и сдай: sq answer <значение>."
+requires_quests: [l0-q03]
+validators:
+  - {type: command_used, any_of: [grep]}
+  - {type: output_matches, answer_sha256: "ac7daf28fd6bfc7a5c3e4b83c7fc9fd51f92ddff10bdc848f99417eca6fafc7c", ci: true}
+hints:
+  - "Рекурсивный поиск по содержимому — grep -r."
+  - "grep -r \"PASS=\" ~/terminal"
+codex: codex/grep.md

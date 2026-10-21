@@ -1,0 +1,10 @@
+id: l0-q05
+type: practice
+title: Выбросить мусор
+brief: "В ~/terminal/scraps остались временные файлы .tmp. Удали их все; файлы без расширения не трогай."
+requires_quests: [l0-q04]
+validators:
+  - {type: script, path: check-scraps.py}
+hints:
+  - "Удаление по маске: rm *.tmp."
+  - "rm ~/terminal/scraps/*.tmp"

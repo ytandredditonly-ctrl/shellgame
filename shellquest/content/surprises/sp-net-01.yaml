@@ -1,0 +1,18 @@
+id: sp-net-01
+track: net
+min_level: 0
+requires_packages: []
+title: Кто-то слушает
+story: На Терминале поднялся незнакомый слушатель. Выясни, на каком порту он сидит.
+brief: "Процесс sq-listener слушает TCP-порт на localhost. Найди его (ss) и сдай номер порта: sq answer <порт>."
+params:
+  port: random_port
+validators:
+  - {type: command_used, any_of: [ss, lsof, netstat]}
+  - {type: output_matches, answer_sha256: "{{ params.port | sha256 }}"}
+hints:
+  - "Слушающие TCP-сокеты показывает ss -tlnp."
+  - "ss -tlnp | grep sq-listener"
+setup: scripts/sp-net-01-setup.sh
+teardown: scripts/sp-net-01-teardown.sh
+codex: codex/sp-net-01.md

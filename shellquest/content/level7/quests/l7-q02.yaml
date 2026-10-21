@@ -1,0 +1,10 @@
+id: l7-q02
+type: practice
+title: Карта форм
+brief: 'Найди форму логина и сдай имя POST-параметра пароля: sq answer <имя>.'
+requires_quests: [l7-q01]
+validators:
+  - {type: output_matches, regex: "^[a-zA-Z0-9_\\[\\]-]+$"}
+hints:
+  - 'Забери HTML: curl http://juicebox/login.'
+  - 'Смотри name= у поля password.'

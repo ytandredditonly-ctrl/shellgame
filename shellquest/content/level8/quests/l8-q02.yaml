@@ -1,0 +1,10 @@
+id: l8-q02
+type: tutorial
+title: Хеш строки
+brief: 'Посчитай SHA-256 строки terminal и сдай первые 8 символов хеша: sq answer <8 симв>.'
+validators:
+  - {type: command_used, any_of: [openssl, sha256sum]}
+  - {type: output_matches, answer_sha256: "3929c34ae6e2bd27263ba0c0dd0e5fd9acfebaffa9fcc86748e89aa2f0d42966"}
+hints:
+  - 'echo -n terminal | sha256sum.'
+  - 'Внимательно с -n (без перевода строки).'

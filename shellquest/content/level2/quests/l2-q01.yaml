@@ -1,0 +1,12 @@
+id: l2-q01
+type: tutorial
+title: Список процессов
+brief: "Игра запустила фоновый процесс sq-demo. Найди его (ps) и сдай его PID: sq answer <pid>."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [ps, top, htop, pgrep]}
+  - {type: script, path: check-demo-pid.py}
+hints:
+  - "Все процессы — ps aux; фильтр — grep."
+  - "pgrep -f sq-demo  или  ps aux | grep sq-demo"
+codex: codex/ps.md

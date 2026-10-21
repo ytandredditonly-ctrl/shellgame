@@ -1,0 +1,11 @@
+id: l3-q03
+type: practice
+title: Только ошибки
+brief: "Посчитай запросы со статусом 404 и сдай число: sq answer <число>."
+requires_quests: [l3-q02]
+validators:
+  - {type: command_used, any_of: [awk, grep, wc]}
+  - {type: output_matches, answer_sha256: "cc6bb91d4a9aec9fe2e20ae49fd18166f522a7918a2ff2ecd1c2c35b5d4649e1"}
+hints:
+  - "Отфильтруй по третьему полю, затем посчитай."
+  - "awk '$3==404' access.log | wc -l"

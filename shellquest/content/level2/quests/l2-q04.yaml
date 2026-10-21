@@ -1,0 +1,11 @@
+id: l2-q04
+type: practice
+title: Служба под контролем
+brief: "Запусти службу sq-demo.service и убедись, что она активна. (Нужен sq-helperd / sudo и установленный юнит.)"
+requires_quests: []
+validators:
+  - {type: service_active, unit: sq-demo}
+hints:
+  - "systemctl start, проверка — systemctl status."
+  - "sudo systemctl start sq-demo"
+codex: codex/systemctl.md

@@ -1,0 +1,12 @@
+id: l6-q03
+type: practice
+title: Что за сервис
+brief: 'Определи сервис на открытом порту хоста db (nmap -sV) и сдай его имя: sq answer <сервис>.'
+requires_quests: [l6-q02]
+requires_packages: [nmap]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, regex: "^[a-zA-Z0-9_-]+$"}
+hints:
+  - 'Определение версий — nmap -sV <host>.'
+  - 'Смотри колонку SERVICE/VERSION.'

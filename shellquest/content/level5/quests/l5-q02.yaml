@@ -1,0 +1,11 @@
+id: l5-q02
+type: practice
+title: Открыть порт
+brief: 'Разреши входящий трафик на TCP 22 правилом firewall.'
+validators:
+  - {type: command_used, any_of: [ufw, nft, iptables]}
+  - {type: script, path: check-allow-22.py}
+hints:
+  - 'ufw allow 22/tcp или правило nft.'
+  - 'sudo ufw allow 22/tcp && sudo ufw enable'
+codex: codex/ufw.md

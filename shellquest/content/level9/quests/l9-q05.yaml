@@ -1,0 +1,11 @@
+id: l9-q05
+type: practice
+title: Разведка привилегий
+brief: 'Найди путь к локальному повышению привилегий и сдай вектор: sq answer <suid|sudo|cron|capability>.'
+requires_quests: [l9-q03]
+requires_packages: [peass]
+validators:
+  - {type: output_matches, regex: "^(suid|sudo|cron|capability)$"}
+hints:
+  - 'Запусти linpeas.sh на цели.'
+  - 'Смотри секции SUID, sudo, cron, writable.'

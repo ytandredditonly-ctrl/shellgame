@@ -1,0 +1,10 @@
+id: l8-q06
+type: combo
+title: Вскрыть архив
+brief: 'Подбери пароль к ~/terminal/crypto/vault.gpg, расшифруй и сдай флаг изнутри: sq flag <значение>.'
+requires_quests: [l8-q04]
+validators:
+  - {type: flag, sha256: "cfb85592a4a971118e5256059512c8ced502ceccc62b9ce4cd5290782ad26db2"}
+hints:
+  - 'gpg2john vault.gpg > h; затем john по словарю.'
+  - 'gpg -d vault.gpg с найденным паролем.'

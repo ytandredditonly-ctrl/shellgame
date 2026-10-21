@@ -1,0 +1,30 @@
+id: l7-boss
+name: Ткач
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Приложение Архитектора хранит его секреты. Пройди его насквозь — от входа до базы.
+phases:
+  - id: p1
+    brief: 'Вход: обойди авторизацию (как q06). sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "8ddd6c19a4c32c7366ef770b5e7187db05d2e91922c5d70148581327b47b6c2d"}
+    hints:
+      - "' OR '1'='1 в поле логина."
+      - 'Флаг — на /profile после входа.'
+  - id: p2
+    brief: 'База: через SQLi выгрузи хеш пароля админа и сдай его: sq answer <hash>.'
+    validators:
+      - {type: output_matches, regex: "^[a-fA-F0-9]{16,}$"}
+    hints:
+      - 'sqlmap ... --dump -T users.'
+      - 'Сдай именно строку хеша.'
+  - id: p3
+    brief: 'Сокровищница: найди флаг в админ-разделе. sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "526aa2676beae3b6def12857cdc3cecc16843cb1b413fc351ae6261f0fd9503b"}
+    hints:
+      - 'После входа загляни в /admin.'
+      - 'Флаг — в загруженном файле/заметке.'

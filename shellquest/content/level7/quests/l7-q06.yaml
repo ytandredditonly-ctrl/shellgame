@@ -1,0 +1,10 @@
+id: l7-q06
+type: combo
+title: Обойти вход
+brief: 'Войди, обойдя логин через SQLi, и сдай флаг со страницы профиля админа: sq flag <значение>.'
+requires_quests: [l7-q03]
+validators:
+  - {type: flag, sha256: "8ddd6c19a4c32c7366ef770b5e7187db05d2e91922c5d70148581327b47b6c2d"}
+hints:
+  - "Классический обход: ' OR '1'='1 в поле."
+  - 'После входа флаг на /profile.'

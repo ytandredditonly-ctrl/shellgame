@@ -1,0 +1,30 @@
+id: l8-boss
+name: Хранилище
+arena: null
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Последний сейф Архитектора заперт на несколько замков. Вскрой их по очереди.
+phases:
+  - id: p1
+    brief: 'Опознай алгоритмы всех хешей в challenge.txt и сдай список (через запятую): sq answer <...>.'
+    validators:
+      - {type: script, path: check-algos.py}
+    hints:
+      - 'hashid по каждой строке.'
+      - 'Перечисли алгоритмы через запятую.'
+  - id: p2
+    brief: 'Подбери пароль к ключевому хешу: sq answer <пароль>.'
+    validators:
+      - {type: output_matches, regex: "^.+$"}
+    hints:
+      - 'john --wordlist=wordlist.txt challenge.txt.'
+      - 'john --show.'
+  - id: p3
+    brief: 'Расшифруй финальный архив найденным паролем и достань флаг: sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "384b2221a7aa07c586414deae8dc8f3b2a880b07fb2458cc8459c35d30d89c21"}
+    hints:
+      - 'Пароль из p2 подходит к архиву.'
+      - 'gpg -d final.gpg.'

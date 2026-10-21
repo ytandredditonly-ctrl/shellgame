@@ -1,0 +1,11 @@
+id: l7-q01
+type: tutorial
+title: Разведка приложения
+brief: 'Прогони быстрый скан juicebox (nikto) и сдай число найденных проблем: sq answer <n>.'
+requires_packages: [nikto]
+validators:
+  - {type: command_used, any_of: [nikto]}
+  - {type: output_matches, regex: "^[0-9]+$"}
+hints:
+  - 'nikto -h http://juicebox.'
+  - 'Считай строки с находками (+).'

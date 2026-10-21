@@ -1,0 +1,30 @@
+id: l5-boss
+name: Осада
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Бот Архитектора пошёл на штурм. Продержись: закрой периметр так, чтобы он перестал проходить.
+phases:
+  - id: p1
+    brief: 'Периметр: firewall с default deny incoming и allow только 22.'
+    validators:
+      - {type: script, path: check-perimeter.py}
+    hints:
+      - 'Сочетай default deny incoming с allow 22/tcp.'
+      - 'ufw default deny incoming; ufw allow 22/tcp; ufw enable'
+  - id: p2
+    brief: 'Автобан: fail2ban забанил атакующий IP в джейле sshd.'
+    validators:
+      - {type: script, path: check-banned.py}
+    hints:
+      - 'Запусти джейл sshd и дай боту пару минут.'
+      - 'fail2ban-client status sshd -> Banned IP list'
+  - id: p3
+    brief: 'Тишина: атакующий забанен — забери флаг из ~/terminal/siege/flag.txt: sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "d41747d43ee638c0245091101847cd108decaf78d9813b479c0952cae221189c"}
+    hints:
+      - 'Флаг открывается после бана атакующего.'
+      - 'cat ~/terminal/siege/flag.txt'

@@ -1,0 +1,12 @@
+id: l6-q01
+type: tutorial
+title: Пинг-свип
+brief: 'Найди живые хосты в подсети арены ($SQ_ARENA_NET) и сдай их число: sq answer <n>.'
+requires_packages: [nmap]
+validators:
+  - {type: command_used, any_of: [nmap, fping]}
+  - {type: output_matches, regex: "^[0-9]+$"}
+hints:
+  - 'Хост-дискавери — nmap -sn <подсеть>.'
+  - "nmap -sn $SQ_ARENA_NET; считай 'Host is up'."
+codex: codex/nmap.md

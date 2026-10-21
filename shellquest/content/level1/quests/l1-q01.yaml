@@ -1,0 +1,12 @@
+id: l1-q01
+type: tutorial
+title: Кто я такой
+brief: "Узнай свой uid и группы (id). Сдай свой uid: sq answer <число>."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [id]}
+  - {type: script, path: check-uid.py}
+hints:
+  - "id покажет uid и группы."
+  - "Число после uid= — это твой идентификатор."
+codex: codex/id.md

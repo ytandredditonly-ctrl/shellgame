@@ -1,0 +1,12 @@
+id: l6-q05
+type: combo
+title: Снять трафик
+brief: 'Сними дамп (tcpdump/tshark) и поймай пароль, который web шлёт в открытую. Сдай его: sq answer <pwd>.'
+requires_quests: [l6-q01]
+requires_packages: [tcpdump]
+validators:
+  - {type: command_used, any_of: [tcpdump, tshark]}
+  - {type: output_matches, regex: "^.+$"}
+hints:
+  - 'tcpdump -A -i <iface> port 80.'
+  - 'Ищи строку с pwd= в выводе.'

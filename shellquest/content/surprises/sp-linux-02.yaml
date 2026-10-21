@@ -1,0 +1,18 @@
+id: sp-linux-02
+track: linux
+min_level: 1
+requires_packages: []
+title: Дверь нараспашку
+story: В песочнице завёлся файл с правами на запись для всех. Нехорошо.
+brief: "В ~/sq-sandbox один файл world-writable. Найди его и сдай имя (без пути): sq answer <имя>."
+params:
+  name: random_name
+validators:
+  - {type: command_used, any_of: [find, ls, stat]}
+  - {type: output_matches, answer_sha256: "{{ params.name | sha256 }}"}
+hints:
+  - "Файлы с битом записи для всех — find <dir> -perm -0002 -type f."
+  - "find ~/sq-sandbox -perm -0002 -type f"
+setup: scripts/sp-linux-02-setup.sh
+teardown: scripts/sp-linux-02-teardown.sh
+codex: codex/sp-linux-02.md

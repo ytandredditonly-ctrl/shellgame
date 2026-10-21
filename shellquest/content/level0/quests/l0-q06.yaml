@@ -1,0 +1,11 @@
+id: l0-q06
+type: practice
+title: Переименовать
+brief: "Перемести ~/terminal/archive/old_name в ~/terminal/archive/report."
+requires_quests: [l0-q02]
+validators:
+  - {type: file_exists, path: ~/terminal/archive/report}
+  - {type: script, path: check-renamed.py}
+hints:
+  - "Переместить/переименовать — mv."
+  - "mv ~/terminal/archive/old_name ~/terminal/archive/report"

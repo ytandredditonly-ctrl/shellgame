@@ -1,0 +1,11 @@
+id: l2-q05
+type: practice
+title: Почитать журнал
+brief: "В журнале sq-demo есть строка START-CODE. Найди её (journalctl) и сдай код: sq answer <код>."
+requires_quests: [l2-q04]
+validators:
+  - {type: command_used, any_of: [journalctl]}
+  - {type: output_matches, answer_sha256: "c5220b3c4266890f047190c18dc4243e0dac079d43ca8065899c4f9f3cf124ef", ci: true}
+hints:
+  - "Журнал юнита — journalctl -u sq-demo."
+  - "journalctl -u sq-demo | grep START-CODE"

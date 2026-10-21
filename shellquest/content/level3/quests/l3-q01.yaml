@@ -1,0 +1,12 @@
+id: l3-q01
+type: tutorial
+title: Первые строки
+brief: "Посмотри начало ~/terminal/logs/access.log (head) и сдай HTTP-статус первой строки: sq answer <код>."
+requires_quests: []
+validators:
+  - {type: command_used, any_of: [head, cat, less]}
+  - {type: output_matches, answer_sha256: "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a"}
+hints:
+  - "Начало файла — head."
+  - "head -1 ~/terminal/logs/access.log — статус это третье поле."
+codex: codex/awk.md

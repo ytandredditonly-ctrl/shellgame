@@ -1,0 +1,11 @@
+id: l9-q01
+type: tutorial
+title: Разведка цели
+brief: 'Просканируй citadel (nmap -sV) и сдай версию уязвимого сервиса: sq answer <версия>.'
+requires_packages: [nmap]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, regex: "^[0-9][0-9a-zA-Z._-]*$"}
+hints:
+  - 'nmap -sV citadel.'
+  - 'Запиши точную версию — нужна для эксплойта.'

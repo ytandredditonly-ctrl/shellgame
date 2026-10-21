@@ -1,0 +1,32 @@
+id: l2-boss
+name: Нежить
+arena: null
+time_limit: null
+hints_enabled: true
+story_brief: >-
+  Что-то грузит Терминал и оживает после каждого убийства. Найди источник,
+  убери автозапуск и прекрати это насовсем.
+phases:
+  - id: p1
+    brief: "Найди процесс-вредителя sq-miner и сдай его имя: sq answer sq-miner."
+    validators:
+      - {type: command_used, any_of: [ps, top, pgrep, grep]}
+      - {type: output_matches, answer_sha256: "790c8b492f95851ca1b96872b8d78057e82cfc3b8875a2710ea018bfda46fedd"}
+    hints:
+      - "Ищи по CPU в top или ps aux --sort=-%cpu."
+      - "pgrep -af sq-miner"
+  - id: p2
+    brief: "Убери автозапуск, который возрождает его (cron-запись sq-*)."
+    validators:
+      - {type: script, path: check-cron-gone.py}
+    hints:
+      - "Найди запись в /etc/cron.d/ или crontab и удали её."
+      - "sudo rm /etc/cron.d/sq-revive  (или crontab -r для своей)"
+  - id: p3
+    brief: "Добей процесс так, чтобы он не вернулся, затем сдай флаг из ~/terminal/undead/flag.txt: sq flag <значение>."
+    validators:
+      - {type: script, path: check-miner-dead.py}
+      - {type: flag, sha256: "7f27ccb7568da1e615e4f1a6c8da22e004d5cff561dee262448600a3eec67d66"}
+    hints:
+      - "Сначала убери автозапуск (p2), потом убей процесс."
+      - "pkill -f sq-miner && cat ~/terminal/undead/flag.txt"

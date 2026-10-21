@@ -1,0 +1,32 @@
+id: l0-boss
+name: Собиратель
+arena: null                 # level 0 uses a directory arena under ~/terminal/vault
+time_limit: null
+hints_enabled: true
+story_brief: >-
+  Архитектор разбил ключевой файл на части и раскидал их по хранилищу
+  ~/terminal/vault. Собери фрагменты по порядку, восстанови ключ и сдай его.
+phases:
+  - id: p1
+    brief: "Найди все фрагменты part_N в ~/terminal/vault. Сдай их количество: sq answer <число>."
+    validators:
+      - {type: command_used, any_of: [find, ls, grep]}
+      - {type: output_matches, answer_sha256: "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"}
+    hints:
+      - "Фрагменты лежат в подпапках vault. Рекурсивный обход — find или ls -R."
+      - "find ~/terminal/vault -name 'part_*' | wc -l"
+  - id: p2
+    brief: "Склей фрагменты по порядку (part_1..part_4) в ~/terminal/vault/key.txt."
+    validators:
+      - {type: file_exists, path: ~/terminal/vault/key.txt}
+      - {type: file_contains, path: ~/terminal/vault/key.txt, regex: "^ARCHITECT-7731$"}
+    hints:
+      - "Каждый фрагмент содержит кусок строки. Собери их cat'ом в нужном порядке."
+      - "cat part_1 part_2 part_3 part_4 (пути подставь) > ~/terminal/vault/key.txt"
+  - id: p3
+    brief: "Сдай восстановленный ключ: sq flag <ключ>."
+    validators:
+      - {type: flag, sha256: "e91bdd89366be72db3d23aac70b55fc75597d264a337fa5ed97926f9b869783c"}
+    hints:
+      - "Ключ — содержимое key.txt."
+      - "sq flag ARCHITECT-7731"

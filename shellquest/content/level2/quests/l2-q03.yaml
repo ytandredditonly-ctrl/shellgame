@@ -1,0 +1,12 @@
+id: l2-q03
+type: practice
+title: Убить процесс
+brief: "Процесс sq-runaway завис. Останови его (kill/pkill)."
+requires_quests: [l2-q01]
+validators:
+  - {type: command_used, any_of: [kill, pkill]}
+  - {type: script, path: check-runaway-dead.py}
+hints:
+  - "Нужен PID (ps/pgrep), затем kill <PID>."
+  - "pkill -f sq-runaway"
+codex: codex/kill.md

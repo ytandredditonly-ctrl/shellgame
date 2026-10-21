@@ -1,0 +1,18 @@
+id: sp-linux-01
+track: linux
+min_level: 0
+requires_packages: []
+title: Куда делось место
+story: В песочнице что-то разрослось. Найди виновника.
+brief: "Директория ~/sq-sandbox забита файлами. Найди самый большой файл и сдай его имя (без пути): sq answer <имя>."
+params:
+  name: random_name
+validators:
+  - {type: command_used, any_of: [du, ls, find, sort]}
+  - {type: output_matches, answer_sha256: "{{ params.name | sha256 }}"}
+hints:
+  - "Размеры показывает du -h или ls -lS."
+  - "du -a ~/sq-sandbox | sort -nr | head -1  (имя — в конце пути)"
+setup: scripts/sp-linux-01-setup.sh
+teardown: scripts/sp-linux-01-teardown.sh
+codex: codex/sp-linux-01.md

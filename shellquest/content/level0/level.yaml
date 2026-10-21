@@ -1,0 +1,17 @@
+id: 0
+name: Пробуждение
+# All level-0 utilities are coreutils — nothing to buy.
+unlock_packages: []
+target_commands: [ls, cd, pwd, cat, less, man, mkdir, cp, mv, rm, find, grep]
+command_threshold: 0.8
+xp_required: 180
+shop: []
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Ты очнулся оператором чужой машины. Прежний владелец — Архитектор — исчез,
+  оставив Терминал в беспорядке. Возьми его под контроль: осмотрись, наведи
+  порядок и собери то, что он спрятал.
+story_outro: >-
+  Терминал слушается тебя. В обломках его системы нашёлся ключ — первый
+  след Архитектора. Дальше будет интереснее.

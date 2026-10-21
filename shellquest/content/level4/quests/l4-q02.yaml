@@ -1,0 +1,10 @@
+id: l4-q02
+type: tutorial
+title: Жив ли сосед
+brief: 'Проверь доступность контейнера gatekeeper ($SQ_ARENA_HOST) несколькими пакетами (ping).'
+requires_quests: [l4-q01]
+validators:
+  - {type: command_used, any_of: [ping]}
+hints:
+  - 'ping <адрес>, стоп Ctrl+C.'
+  - 'Адрес арены — в $SQ_ARENA_HOST.'

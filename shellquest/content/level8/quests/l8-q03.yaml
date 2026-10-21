@@ -1,0 +1,12 @@
+id: l8-q03
+type: practice
+title: Симметричное шифрование
+brief: 'Зашифруй ~/terminal/crypto/notes.txt симметрично (gpg -c). Создай notes.txt.gpg.'
+requires_quests: [l8-q02]
+validators:
+  - {type: command_used, any_of: [gpg, openssl]}
+  - {type: file_exists, path: ~/terminal/crypto/notes.txt.gpg}
+hints:
+  - 'gpg -c notes.txt.'
+  - 'Пароль запомни — понадобится для расшифровки.'
+codex: codex/gpg.md

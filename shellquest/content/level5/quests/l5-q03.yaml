@@ -1,0 +1,11 @@
+id: l5-q03
+type: practice
+title: Закрыть лишнее
+brief: 'Запрети входящий трафик на TCP 23 (telnet).'
+requires_quests: [l5-q02]
+validators:
+  - {type: command_used, any_of: [ufw, nft, iptables]}
+  - {type: script, path: check-deny-23.py}
+hints:
+  - 'ufw deny 23/tcp.'
+  - 'Проверь: ufw status numbered.'

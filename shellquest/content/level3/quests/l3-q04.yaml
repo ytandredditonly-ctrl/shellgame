@@ -1,0 +1,12 @@
+id: l3-q04
+type: practice
+title: Топ адресов
+brief: "Найди IP с наибольшим числом запросов и сдай его: sq answer <ip>."
+requires_quests: [l3-q02]
+validators:
+  - {type: command_used, any_of: [sort, uniq, awk]}
+  - {type: output_matches, answer_sha256: "130e4daba9786013f48dc2fccf39f91a0b3ec2cfba74ff0b645acf95229df69e"}
+hints:
+  - "Связка: вырезать IP -> sort -> uniq -c -> sort -nr."
+  - "awk '{print $1}' access.log | sort | uniq -c | sort -nr | head -1"
+codex: codex/sort.md

@@ -1,0 +1,12 @@
+id: l7-q05
+type: combo
+title: Достать данные
+brief: 'Через SQLi вытащи имена таблиц и сдай таблицу с пользователями: sq answer <таблица>.'
+requires_quests: [l7-q03]
+requires_packages: [sqlmap]
+validators:
+  - {type: command_used, any_of: [sqlmap]}
+  - {type: output_matches, regex: "^[a-zA-Z0-9_-]+$"}
+hints:
+  - 'sqlmap ... --tables.'
+  - 'Ищи таблицу, похожую на users/accounts.'

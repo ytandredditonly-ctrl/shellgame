@@ -1,0 +1,12 @@
+id: l8-q04
+type: practice
+title: Подобрать хеш
+brief: 'Подбери по словарю пароль за первым хешем (john/hashcat) и сдай пароль: sq answer <пароль>.'
+requires_quests: [l8-q01]
+requires_packages: [john]
+validators:
+  - {type: command_used, any_of: [john, hashcat]}
+  - {type: output_matches, regex: "^.+$"}
+hints:
+  - 'john --wordlist=wordlist.txt hashes.txt.'
+  - 'Результат: john --show hashes.txt.'

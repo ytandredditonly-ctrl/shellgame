@@ -1,0 +1,31 @@
+id: l1-boss
+name: Открытая дверь
+arena: null
+time_limit: null
+hints_enabled: true
+story_brief: >-
+  Архитектор оставил брешь в правах: один файл в ~/terminal/guard открыт на
+  запись всему миру. Найди его, закрой брешь и забери то, что за ней спрятано.
+phases:
+  - id: p1
+    brief: "Найди world-writable файл в ~/terminal/guard и сдай его путь: sq answer <путь>."
+    validators:
+      - {type: command_used, any_of: [find, ls, stat]}
+      - {type: script, path: check-ww-path.py}
+    hints:
+      - "Файлы с битом записи для всех — find <dir> -perm -0002 -type f."
+      - "find ~/terminal/guard -perm -0002 -type f 2>/dev/null"
+  - id: p2
+    brief: "Закрой брешь: сними право записи для остальных у найденного файла."
+    validators:
+      - {type: script, path: check-ww-fixed.py}
+    hints:
+      - "Снять запись для others — chmod o-w <файл>."
+      - "chmod o-w <путь из p1>"
+  - id: p3
+    brief: "За брешью Архитектор спрятал подсказку в ~/terminal/guard/stash/flag.txt. Прочитай и сдай флаг: sq flag <значение>."
+    validators:
+      - {type: flag, sha256: "42955a37985f60286eb7afa4e4abb4f410a97adf154d37d0843cf697ad0ec06a"}
+    hints:
+      - "Прочитай файл обычным cat."
+      - "cat ~/terminal/guard/stash/flag.txt"

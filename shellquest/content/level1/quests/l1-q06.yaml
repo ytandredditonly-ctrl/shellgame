@@ -1,0 +1,10 @@
+id: l1-q06
+type: combo
+title: Сменить владельца
+brief: "Передай ~/terminal/shared/report.txt пользователю sq-guest."
+requires_quests: [l1-q02, l1-q05]
+validators:
+  - {type: file_owner, path: ~/terminal/shared/report.txt, owner: sq-guest}
+hints:
+  - "Владелец — chown под sudo."
+  - "sudo chown sq-guest ~/terminal/shared/report.txt"

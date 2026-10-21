@@ -1,0 +1,18 @@
+id: 9
+name: Последний рубеж
+unlock_packages: []
+target_commands: [nmap, searchsploit, msfconsole, nc, linpeas]
+command_threshold: 0.6
+xp_required: 800
+shop:
+  - {name: searchsploit, package: exploitdb, price: 80, desc: "Локальная база эксплойтов"}
+  - {name: metasploit, package: metasploit-framework, price: 200, desc: "Фреймворк эксплуатации"}
+  - {name: linpeas, package: peass, price: 60, desc: "Скрипт разведки повышения привилегий"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Финал. Вот она — машина citadel, с которой всё началось. На финальном экране
+  ты узнаешь, кто был по ту сторону. ВСЁ ведётся только против этой учебной VM.
+story_outro: >-
+  Root получен. На экране citadel гаснет последняя строка — и ты наконец видишь,
+  кто выбросил Архитектора из системы. Но это уже другая история.

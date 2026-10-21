@@ -1,0 +1,17 @@
+id: 4
+name: Внешние земли
+unlock_packages: [openssh-server, netcat-openbsd, dnsutils]
+target_commands: [ip, ss, ping, curl, wget, dig, nc, ssh]
+command_threshold: 0.8
+xp_required: 420
+shop:
+  - {name: nmap, package: nmap, price: 120, desc: "Сканер сети и портов (пригодится и на ур.6)"}
+  - {name: dnsutils, package: dnsutils, price: 40, desc: "dig/nslookup — работа с DNS"}
+  - {name: netcat, package: netcat-openbsd, price: 40, desc: "nc — универсальный TCP/UDP-клиент"}
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Терминал под контролем — пора выглянуть наружу. За сетью начинается след,
+  оставленный Архитектором. ВСЕ цели — локальные контейнеры-арены без выхода в интернет.
+story_outro: >-
+  Привратник пройден. Ты внутри сети Архитектора — и у тебя есть ключ от неё.
