@@ -174,7 +174,8 @@ def v_command_used(ctx: Context, spec: dict) -> str:
     for ev in ctx.commands:
         if ev.get("exit") != 0:
             continue
-        if ev.get("name") in wanted:
+        names = ev.get("names") or [ev.get("name")]
+        if wanted.intersection(names):
             return PASS
     return PENDING
 

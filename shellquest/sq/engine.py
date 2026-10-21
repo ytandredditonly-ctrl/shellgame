@@ -101,18 +101,20 @@ class Engine:
         already = self.db.opened_commands()
         targets = set(level.target_commands)
         for ev in cmds:
-            name = ev.get("name")
-            if (
-                name in targets
-                and ev.get("exit") == 0
-                and name not in already
-                and name not in opened_now
-            ):
-                if self.db.open_command(name):
-                    opened_now.append(name)
-                    self.db.add_xp_coins(COMMAND_XP, COMMAND_COINS)
-                    self.db.log_event("command_opened", command=name)
-                    events.emit("command_opened", command=name)
+            if ev.get("exit") != 0:
+                continue
+            # credit every name a line maps to (so `sudo useradd` opens both)
+            for name in ev.get("names") or [ev.get("name")]:
+                if (
+                    name in targets
+                    and name not in already
+                    and name not in opened_now
+                ):
+                    if self.db.open_command(name):
+                        opened_now.append(name)
+                        self.db.add_xp_coins(COMMAND_XP, COMMAND_COINS)
+                        self.db.log_event("command_opened", command=name)
+                        events.emit("command_opened", command=name)
         return opened_now
 
     # -- context -------------------------------------------------------

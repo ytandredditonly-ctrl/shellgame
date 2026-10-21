@@ -42,19 +42,64 @@ def append_event(cmdline: str, exit_code: int, cwd: str, duration_ms: int = 0) -
         fh.write(json.dumps(rec) + "\n")
 
 
-def _first_word(cmdline: str) -> str:
+_ENV_ASSIGN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
+_SUDO_LIKE = {"sudo", "doas"}
+# sudo/doas options that take a following argument (so we skip that token too).
+_SUDO_ARG_OPTS = {
+    "-u", "-g", "-h", "-p", "-C", "-U", "-r", "-t", "-D", "-R",
+    "--user", "--group", "--host", "--prompt", "--close-from",
+    "--other-user", "--role", "--type", "--chdir", "--chroot",
+}
+
+
+def _command_names(cmdline: str) -> list[str]:
+    """Command names a line should credit.
+
+    Unwraps ``sudo``/``doas`` (and skips their options) so that e.g.
+    ``sudo useradd -m x`` credits *both* ``sudo`` and ``useradd`` — otherwise
+    every privileged command would only ever register as ``sudo``. Leading
+    env assignments (``FOO=bar cmd``) are skipped. Basenames only, so
+    ``/usr/sbin/useradd`` → ``useradd``.
+    """
     try:
         parts = shlex.split(cmdline)
     except ValueError:
         parts = cmdline.split()
-    if not parts:
-        return ""
-    # Skip leading env assignments like FOO=bar cmd ...
-    for tok in parts:
-        if "=" in tok and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", tok):
-            continue
-        return os.path.basename(tok)
-    return ""
+    i = 0
+    while i < len(parts) and _ENV_ASSIGN.match(parts[i]):
+        i += 1
+    if i >= len(parts):
+        return []
+
+    names: list[str] = []
+    first = os.path.basename(parts[i])
+    if first:
+        names.append(first)
+
+    if first in _SUDO_LIKE:
+        i += 1
+        # skip sudo's own options (and the arg of arg-taking ones)
+        while i < len(parts):
+            tok = parts[i]
+            if tok == "--":
+                i += 1
+                break
+            if tok.startswith("-"):
+                if tok in _SUDO_ARG_OPTS:
+                    i += 1
+                i += 1
+                continue
+            break
+        # skip env assignments after sudo (sudo FOO=bar cmd / sudo env FOO=bar cmd)
+        if i < len(parts) and os.path.basename(parts[i]) == "env":
+            i += 1
+        while i < len(parts) and _ENV_ASSIGN.match(parts[i]):
+            i += 1
+        if i < len(parts):
+            real = os.path.basename(parts[i])
+            if real and real not in names:
+                names.append(real)
+    return names
 
 
 def drain_buffer(db) -> list[dict[str, Any]]:
@@ -83,10 +128,11 @@ def drain_buffer(db) -> list[dict[str, Any]]:
         if cmd == prev:
             continue
         prev = cmd
-        name = _first_word(cmd)
+        names = _command_names(cmd)
         ev = {
             "cmd": cmd,
-            "name": name,
+            "name": names[-1] if names else "",   # primary = unwrapped command
+            "names": names,                        # all credited names (incl. sudo)
             "exit": int(rec.get("exit", 0)),
             "cwd": rec.get("cwd", ""),
             "dur": int(rec.get("dur", 0)),
