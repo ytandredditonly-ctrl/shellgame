@@ -25,15 +25,15 @@ echo "$R" | grep -q 'role=admin' && ok "SQLi auth bypass" || no "SQLi auth bypas
 echo "== L4 gatekeeper (ssh + web + echo) =="
 ( cd "$ROOT/level4/arena" && compose -f compose.yaml up -d --build )
 sleep 4
-docker exec sq-gatekeeper sh -c 'curl -s localhost:8080' 2>/dev/null | grep -q welcome && ok "web welcome page" || no "web welcome"
+docker exec sq-gatekeeper python3 -c 'import urllib.request;print(urllib.request.urlopen("http://127.0.0.1:8080").read().decode())' 2>/dev/null | grep -q welcome && ok "web welcome page" || no "web welcome"
 docker exec sq-gatekeeper sh -c 'echo ping | socat - TCP:localhost:9000' 2>/dev/null | grep -q pong-42 && ok "echo pong-42" || no "echo service"
 ( cd "$ROOT/level4/arena" && compose -f compose.yaml down -v )
 
 echo "== L6 recon net (web/db/misc) =="
 ( cd "$ROOT/level6/arena" && compose -f compose.yaml up -d --build )
 sleep 4
-docker exec sq-web sh -c 'curl -sI localhost:80' 2>/dev/null | grep -qi 'server: nginx' && ok "web nginx fingerprint" || no "web fingerprint"
-docker exec sq-web sh -c 'curl -s -o /dev/null -w "%{http_code}" localhost:80/backup' 2>/dev/null | grep -q 200 && ok "hidden /backup" || no "/backup"
+docker exec sq-web python3 -c 'import urllib.request;print("Server:",urllib.request.urlopen("http://127.0.0.1:80/").headers.get("Server"))' 2>/dev/null | grep -qi nginx && ok "web nginx fingerprint" || no "web fingerprint"
+docker exec sq-web python3 -c 'import urllib.request;print(urllib.request.urlopen("http://127.0.0.1:80/backup").status)' 2>/dev/null | grep -q 200 && ok "hidden /backup" || no "/backup"
 ( cd "$ROOT/level6/arena" && compose -f compose.yaml down -v )
 
 echo "== L9 citadel (foothold + privesc) =="
