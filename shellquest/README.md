@@ -27,19 +27,26 @@ How much runs on a bare host depends on what the level touches:
 | 1 | Хранители | users, permissions, ownership | ✅ fully (sudo quests use your own sudo) |
 | 2 | Нутро | processes, services, cron | ◑ process/kill quests ✅; service/journal/cron need `sq-helperd`/root |
 | 3 | Конвейер | pipelines, sed/awk, scripts | ✅ fully (deterministic generated logs) |
-| 4 | Внешние земли | networking, ssh | ◑ needs the Docker arena (`gatekeeper`) |
-| 5 | Крепость | firewall, fail2ban | ◑ needs root + attacker arena |
-| 6 | Разведка | nmap, tcpdump, gobuster | ○ needs multi-host arena |
-| 7 | Паутина | web / SQLi | ○ needs the `juicebox` arena |
-| 8 | Шифр | hashes, gpg, cracking | ◑ wordlist/hashes ship; vault/challenge via helper |
-| 9 | Последний рубеж | full chain to root | ○ needs the `citadel` arena |
+| 4 | Внешние земли | networking, ssh | ✅ with Docker — `gatekeeper` image (ssh+web+echo) |
+| 5 | Крепость | firewall, fail2ban | ◑ with Docker + root — `attacker` image brute-forces you |
+| 6 | Разведка | nmap, tcpdump, gobuster | ✅ with Docker — `web`/`db`/`misc` images |
+| 7 | Паутина | web / SQLi | ✅ with Docker — vulnerable `juicebox` image |
+| 8 | Шифр | hashes, gpg, cracking | ✅ fully (host-local: gpg vaults + crackable hashes) |
+| 9 | Последний рубеж | full chain to root | ✅ with Docker — `citadel` (ssh foothold + sudo/find privesc) |
 
-Arena-dependent checks (`script` validators against containers) return
-**pending**, never a false pass/fail, until the helper/Docker layer (TZ
-stages 3–4) is wired up. Flag-submit phases work standalone: obtain a flag any
-way and `sq flag` accepts it. Each such level ships an `arena/compose.yaml`
-placeholder describing the services `sq-helperd` will bring up on the
-`internal: true` network.
+Every arena is a **real, buildable image** under `content/levelN/arena/`
+(Dockerfiles + compose on an `internal: true` network). `scripts/verify-arenas.sh`
+builds and smoke-tests them. Arena-side `script` validators (e.g. the boss port
+map) return **pending**, never a false pass/fail, until graded by `sq-helperd`;
+flag-submit phases work standalone.
+
+#### One-time Docker access (needed for levels 4–7, 9)
+
+```bash
+sudo usermod -aG docker "$USER"        # then log out/in (or: newgrp docker)
+sudo apt-get install -y docker-compose-plugin   # provides `docker compose`
+bash shellquest/scripts/verify-arenas.sh         # builds + smoke-tests arenas
+```
 
 > Designed to run inside a VM. Level 0 touches only `~/terminal` and the game's
 > own state dir, and every change is reversible via `sq uninstall`.
@@ -90,6 +97,8 @@ sq uninstall           # run level teardowns, print removal steps
 
 ### Surprise events — «Детская неожиданность» (§7a)
 
+Six events ship (crypto ×3: base64, ROT13, SHA256 integrity; net ×1: hidden
+listener; linux ×2: disk hog, world-writable) — all host-playable and tested.
 Short side-tasks on three tracks (crypto / net / linux) that don't affect level
 progression. The daemon rolls for one during an active session (configurable
 chance/cooldown/min-session); `sq surprise` starts one on demand. Each run is
@@ -175,17 +184,18 @@ Implemented (the whole TZ feature set):
   `pause/resume`, `uninstall`.
 - **`sq-helperd`** — root helper with a fixed, allow-listed operation set over a
   Unix socket; dry-run when unprivileged. `sq buy` installs through it.
-- **Docker arenas** — `gatekeeper` (L4) and the vulnerable `juicebox` (L7) are
-  full working images; L5/L6/L9 ship compose + a documented scaffold, L8 a
-  provisioning note. Brought up/down by the helper around boss fights.
-- **Surprise events** (§7a) — engine, three host-playable events (one per
-  track), daemon scheduler, rewards, codex write-ups, free drop, rollback.
+- **Docker arenas** — real, buildable images for L4 `gatekeeper`, L6
+  `web`/`db`/`misc`, L7 `juicebox`, L9 `citadel`, and L5 `attacker`; L8 is
+  host-local (gpg provisioning). Brought up/down by the helper around boss
+  fights; `scripts/verify-arenas.sh` builds + smoke-tests them.
+- **Surprise events** (§7a) — engine, six host-playable events across all three
+  tracks, daemon scheduler, rewards, codex write-ups, free drop, rollback.
 - **Manual-install watcher** (§5) — `lenient`/`strict` dpkg.log policy.
 - **Config** (`~/.config/shellquest/config.yaml`) + `sq config`.
 - **JSON-Schema validation** of every content file at load (§11).
 
-Content authors still extend levels 5/6/8/9 arenas from the shipped scaffolds
-(intentionally — building fully vulnerable target images is per-level content
-work). The engine runs **unprivileged**; only `sq-helperd` is root. Attack-style
-content (levels 6–9) targets only local training containers on an
-`internal: true` network — nothing points outward.
+The L5 `attacker` and L9 `citadel` images are complete but have only been
+built/run where Docker was available to the author — run `scripts/verify-arenas.sh`
+in your environment to confirm. The engine runs **unprivileged**; only
+`sq-helperd` is root. Attack-style content (levels 6–9) targets only local
+training containers on an `internal: true` network — nothing points outward.
