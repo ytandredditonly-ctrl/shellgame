@@ -35,7 +35,13 @@ PKG_RE = re.compile(r"^[a-z0-9][a-z0-9+._-]{1,99}$")
 NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$")
 
 _running = True
-DRY = os.geteuid() != 0 or os.environ.get("SQ_HELPER_DRY_RUN") == "1"
+# Dry-run unless root. A docker-group (non-root) user can still drive arenas
+# live by setting SQ_HELPER_FORCE_LIVE=1 — package ops will then fail cleanly
+# without root, but arena_up/down work via the user's docker access.
+DRY = (
+    (os.geteuid() != 0 and os.environ.get("SQ_HELPER_FORCE_LIVE") != "1")
+    or os.environ.get("SQ_HELPER_DRY_RUN") == "1"
+)
 
 
 def _journal(action: str, detail: str) -> None:
@@ -106,7 +112,10 @@ def _compose_binary() -> list[str] | None:
 
 
 def _compose(path: str) -> list[str] | None:
+    # Accept absolute paths or paths relative to the content tree.
     p = Path(path)
+    if not p.is_absolute():
+        p = Path(paths.CONTENT_DIR) / path
     if not p.is_file():
         return None
     # must live inside the content tree
