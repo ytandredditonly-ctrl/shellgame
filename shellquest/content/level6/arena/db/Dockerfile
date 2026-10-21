@@ -1,6 +1,4 @@
-FROM alpine:3.19
-RUN apk add --no-cache socat
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+FROM python:3.12-slim
+COPY banner.py /opt/banner.py
 EXPOSE 5432
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python3","/opt/banner.py"]
