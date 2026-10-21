@@ -576,6 +576,28 @@ def cmd_helper(args) -> int:
     return 0
 
 
+def cmd_resetup(args) -> int:
+    """Re-run the current level's setup (restore marker processes / files).
+
+    Safe to run any time: level setup scripts are idempotent. Handy after a
+    reboot (userspace markers don't survive) or if you killed/removed something
+    the level needs.
+    """
+    db, eng = _load()
+    level = eng.current_level()
+    if not level:
+        print(red("Нет активного уровня."))
+        return 1
+    if not level.setup:
+        print(dim(f"У уровня {level.id} нет окружения для восстановления."))
+        return 0
+    eng._run_level_setup(level)
+    db.kv_set(f"setup_done_{level.id}", "1")
+    print(green(f"Окружение уровня {level.id} восстановлено."))
+    print(dim("Если задание ждало процесс/файл — повтори sq check."))
+    return 0
+
+
 def cmd_gui(args) -> int:
     from . import gui
     return gui.run(port=args.port, open_browser=not args.no_browser)
@@ -628,6 +650,7 @@ def build_parser() -> argparse.ArgumentParser:
     cf.set_defaults(fn=cmd_config)
 
     sub.add_parser("helper", help="статус sq-helperd").set_defaults(fn=cmd_helper)
+    sub.add_parser("resetup", help="восстановить окружение уровня (процессы/файлы)").set_defaults(fn=cmd_resetup)
 
     g = sub.add_parser("gui", help="окно-компаньон (read-only)")
     g.add_argument("--port", type=int, default=8777)
