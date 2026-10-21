@@ -576,6 +576,11 @@ def cmd_helper(args) -> int:
     return 0
 
 
+def cmd_gui(args) -> int:
+    from . import gui
+    return gui.run(port=args.port, open_browser=not args.no_browser)
+
+
 def cmd_uninstall(args) -> int:
     db, eng = _load()
     print(yellow("Откат изменений shellquest (§12)…"))
@@ -623,6 +628,11 @@ def build_parser() -> argparse.ArgumentParser:
     cf.set_defaults(fn=cmd_config)
 
     sub.add_parser("helper", help="статус sq-helperd").set_defaults(fn=cmd_helper)
+
+    g = sub.add_parser("gui", help="окно-компаньон (read-only)")
+    g.add_argument("--port", type=int, default=8777)
+    g.add_argument("--no-browser", action="store_true", help="не открывать браузер")
+    g.set_defaults(fn=cmd_gui)
 
     lg = sub.add_parser("log", help="журнал событий"); lg.add_argument("-n", type=int, default=50); lg.set_defaults(fn=cmd_log)
     sub.add_parser("pause", help="пауза отслеживания").set_defaults(fn=cmd_pause)

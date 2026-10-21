@@ -19,5 +19,5 @@ packages = ["sq", "sq.validators"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-# Content ships with the package.
-"*" = ["content/**/*"]
+# Content + GUI web assets ship with the package.
+"*" = ["content/**/*", "sq/webui/*"]

@@ -109,6 +109,19 @@ repeats give coins only. Drop is free (`sq surprise drop`) and fully reverts.
 Events touch only `~/sq-drop`, `~/sq-sandbox` and `sq-*` processes, and survive
 shutdown. While one is active the prompt shows a `!`.
 
+### GUI companion window — `sq gui`
+
+A read-only companion window (GUI spec). `sq gui` starts a tiny local web
+server (stdlib only, no extra installs) on `127.0.0.1:8777` and opens it in your
+browser; keep it on a second monitor beside the terminal. It shows the level,
+XP ring, open-command chips, a 10-node world map, live quest cards (with
+per-validator progress dots), and a sliding manual panel (How-to / Commands /
+Codex). It **never mutates state** — buttons copy `sq …` commands to the
+clipboard for the terminal. Updates are pushed in real time over Server-Sent
+Events: finish a quest in the terminal and its card ticks over instantly. If the
+game isn't initialised yet it shows a calm "no connection — run `sq init`"
+screen. Flags: `sq gui --port <n>`, `sq gui --no-browser`.
+
 ### Helper, installs and arenas
 
 `sq-helperd` is the small root daemon that performs the **only** system-changing

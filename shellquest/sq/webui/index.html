@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shellquest</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div id="offline" class="offline">
+  <h2>Нет связи с игрой</h2>
+  <p>Демон недоступен. Запусти игру в терминале: <span class="mono">sq init</span>,
+     затем вернись сюда. Окно подключится автоматически.</p>
+  <button onclick="SQ.reconnect()">Повторить</button>
+</div>
+
+<div id="app" class="hidden">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="lvl" id="lvl">УР. — <b id="lvlname">—</b></div>
+    <div class="xpwrap">
+      <div class="xpbar"><div class="xpfill" id="xpfill"></div></div>
+      <div class="xplabel" id="xplabel">0 / 0 XP</div>
+    </div>
+    <div class="cmds-mini" id="cmdsmini">команды 0/0</div>
+    <div class="coins mono" id="coins">◈ 0<span class="d" id="coinsd"></span></div>
+    <div class="boss-badge locked" id="boss" title="Статус босса">Босс закрыт</div>
+  </div>
+
+  <!-- COLUMNS -->
+  <div class="cols">
+    <div class="col" id="leftcol">
+      <div class="card">
+        <div class="sec-title">Прогресс уровня</div>
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="c-bg" cx="90" cy="90" r="78" fill="none" stroke-width="12"></circle>
+              <circle class="c-fg" id="ringfg" cx="90" cy="90" r="78" fill="none" stroke-width="12"
+                      stroke-dasharray="490" stroke-dashoffset="490"></circle>
+            </svg>
+            <div class="mid">
+              <div class="xpnum" id="ringxp">0</div>
+              <div class="tgoal" id="ringgoal">до босса: — XP</div>
+            </div>
+          </div>
+          <div class="conds">
+            <div class="cond" id="cond-xp"><span class="box">☐</span> Опыт ≥ порога</div>
+            <div class="cond" id="cond-cmd"><span class="box">☐</span> Команды ≥ 80%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Открытые команды</div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Карта мира</div>
+        <div class="map" id="map"></div>
+      </div>
+    </div>
+
+    <div class="col" id="rightcol">
+      <div class="sec-title" style="padding-left:2px">Текущие задания</div>
+      <div id="quests"></div>
+    </div>
+  </div>
+
+  <!-- MANUAL -->
+  <div class="manual collapsed" id="manual">
+    <div class="bar" onclick="SQ.toggleManual()">
+      <span class="ttl">МАНУАЛ</span>
+      <div class="tabs">
+        <div class="tab on" data-tab="howto" onclick="SQ.tab(event,'howto')">Как играть</div>
+        <div class="tab" data-tab="commands" onclick="SQ.tab(event,'commands')">Команды</div>
+        <div class="tab" data-tab="codex" onclick="SQ.tab(event,'codex')">Кодекс</div>
+      </div>
+      <span class="chev" id="chev">▴ F1</span>
+    </div>
+    <div class="body" id="manualbody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="/app.js"></script>
+</body>
+</html>
