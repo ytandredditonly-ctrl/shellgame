@@ -164,6 +164,27 @@ open once purchased. The final boss can disable hints or double their price.
 practice 40 / 10, combo 70 / 25, flag 50 / 30, repair 60 / 40; opening a command
 10 / 5; solving a surprise 30 / 25 (first time) then 10 coins on repeats.
 
+### Tracks (main + DLC «Арсенал»)
+
+The DLC is a **second, parallel track** that opens once the main level-5 boss is
+defeated. It needs no per-module engine code: DLC modules are ordinary `Level`s
+loaded from `content/dlc/dN/` with reserved integer ids (`d1=101 … d10=110`,
+`final=111`), `track: dlc`, a string `dlc_id`, and an optional module-level
+`arena` (up for the whole module, since DLC quests need their targets live before
+the boss). So `engine._level_up`'s `id + 1` advance and all id-keyed state
+(`boss_defeated_<id>`, quests, phases) work unchanged; the only `_level_up` branch
+is `dlc_complete` vs `game_complete` at the end of a track.
+
+**No schema migration** — per-track state lives in the existing `kv` table:
+`track` (active, `main`|`dlc`) plus `track_{main,dlc}_level` / `track_{main,dlc}_xp`.
+`engine.switch_track` stashes the live `profile.level`/`level_xp` into the current
+track's slots and restores the target's; the live `profile` always mirrors the
+active track. It is blocked while a boss fight is active (so transient
+`boss_unlocked`/phase state can't straddle tracks; `boss_unlocked` re-derives on
+the next `sq check`). `sq dlc` lists/enters modules (`dlc_available` gates on the
+Act-I boss, `dlc_module_unlocked` enforces linear order); the arena is raised on
+`sq dlc start` and lowered on `sq dlc leave`/victory via the same helper RPC.
+
 ---
 
 ## 6. Validators

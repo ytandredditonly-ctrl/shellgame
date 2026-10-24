@@ -122,7 +122,11 @@ def cmd_status(args) -> int:
 
     xp_req = eng.effective_xp_required(level)
     bar = _bar(p["level_xp"], xp_req)
-    print(bold(f"Уровень {level.id} — «{level.name}»"))
+    if level.is_dlc:
+        print(bold(f"DLC «Арсенал» · модуль {level.dlc_id} — «{level.name}»")
+              + dim("  (sq dlc leave — в основную игру)"))
+    else:
+        print(bold(f"Уровень {level.id} — «{level.name}»"))
     note = dim(f" (порог снижен с {level.xp_required})") if xp_req != level.xp_required else ""
     print(f"  Опыт:    {p['level_xp']}/{xp_req}  {bar}{note}")
     print(f"  Команды: {opened}/{total} открыто ({int(frac*100)}%, порог {int(level.command_threshold*100)}%)")
@@ -148,7 +152,8 @@ def cmd_quests(args) -> int:
         return 1
     eng._ensure_level_quests(level)
     done = db.done_quests()
-    print(bold(f"Задания уровня {level.id} — «{level.name}»"))
+    where = f"модуля {level.dlc_id}" if level.is_dlc else f"уровня {level.id}"
+    print(bold(f"Задания {where} — «{level.name}»"))
     for q in level.quests.values():
         if db.quest_status(q.id) == "done":
             tag = green("[✓]")
@@ -452,6 +457,113 @@ def _show_phases(db, boss, eng) -> None:
     print(dim("\nПроверка: sq check  ·  ответ: sq answer  ·  флаг: sq flag"))
 
 
+def cmd_dlc(args) -> int:
+    db, eng = _load()
+    if not db.profile():
+        print("Сначала запустите " + cyan("sq init"))
+        return 1
+    mods = eng.content.dlc_modules()
+    if not mods:
+        print(dim("DLC «Арсенал» не установлен в этом паке контента."))
+        return 1
+    action = args.action
+    if action == "start":
+        return _dlc_start(db, eng, args.module)
+    if action in ("leave", "main"):
+        return _dlc_leave(db, eng)
+    # `sq dlc d1` is shorthand for `sq dlc start d1`.
+    if action and eng.content.module_by_dlc_id(action):
+        return _dlc_start(db, eng, action)
+    if action:
+        print(red(f"Неизвестная команда DLC: {action}"))
+        print(dim("sq dlc · sq dlc start <модуль> · sq dlc leave"))
+        return 1
+
+    # Default: the module list.
+    print(bold("«Арсенал» — курс по 10 инструментам ИБ (DLC)"))
+    if not eng.dlc_available():
+        print(yellow("  Заперт. Откроется после победы над боссом основного уровня 5."))
+    cur_dlc = eng.active_track() == "dlc"
+    cur_id = eng.level_id
+    for m in mods:
+        done = eng.boss_defeated(m.id)
+        here = cur_dlc and cur_id == m.id
+        if done:
+            tag = green("[✓]")
+        elif here:
+            tag = cyan("[▶]")
+        elif eng.dlc_module_unlocked(m):
+            tag = yellow("[ ]")
+        else:
+            tag = dim("[·]")
+        print(f"  {tag} {bold(str(m.dlc_id)):<14} {m.name}")
+    print(dim("\nВойти: sq dlc start <модуль>   ·   выйти в основную игру: sq dlc leave"))
+    if cur_dlc:
+        print(cyan(f"  Сейчас ты в DLC (модуль {eng.current_level().dlc_id})."))
+    return 0
+
+
+def _dlc_start(db, eng, module) -> int:
+    if not module:
+        print(red("Укажи модуль: sq dlc start d1"))
+        return 1
+    m = eng.content.module_by_dlc_id(module)
+    if not m:
+        print(red(f"Нет модуля «{module}»."))
+        return 1
+    if not eng.dlc_module_unlocked(m):
+        if not eng.dlc_available():
+            print(red("«Арсенал» ещё заперт — победи босса основного уровня 5."))
+        else:
+            print(red(f"Модуль {module} ещё закрыт — пройди предыдущий модуль."))
+        return 1
+    ok, msg = eng.switch_track("dlc", m.id)
+    if not ok:
+        print(red(msg))
+        return 1
+    eng._ensure_level_quests(m)
+    if m.setup and db.kv_get(f"setup_done_{m.id}") != "1":
+        _run_content_script(m, m.setup)
+        db.kv_set(f"setup_done_{m.id}", "1")
+    comp = eng.module_arena_compose(m)
+    if comp:
+        from . import helper
+
+        r = helper.arena_up(comp)
+        if r.reached and r.ok:
+            print(dim("Полигон модуля поднят." + (" (dry-run)" if r.dry_run else "")))
+        elif not r.reached:
+            print(yellow("sq-helperd не запущен — полигон не поднят "
+                         "(задания с контейнерами подождут)."))
+    print(bold(f"▶ Модуль {m.dlc_id} — «{m.name}»"))
+    if m.story_intro:
+        print("\n" + m.story_intro + "\n")
+    return cmd_quests(args_ns())
+
+
+def _dlc_leave(db, eng) -> int:
+    if eng.active_track() != "dlc":
+        print(dim("Ты уже в основной кампании."))
+        return 0
+    level = eng.current_level()
+    comp = eng.module_arena_compose(level) if level else None
+    if comp:
+        from . import helper
+
+        helper.arena_down(comp)
+    ok, msg = eng.switch_track("main")
+    if not ok:
+        print(red(msg))
+        return 1
+    print(green("Вернулся в основную кампанию.") + dim("  (sq status / sq quests)"))
+    return 0
+
+
+def args_ns():
+    """A bare namespace for commands that read no attributes (e.g. cmd_quests)."""
+    return argparse.Namespace()
+
+
 def cmd_log(args) -> int:
     db, _ = _load()
     rows = db.events(limit=args.n)
@@ -639,6 +751,11 @@ def build_parser() -> argparse.ArgumentParser:
     cx = sub.add_parser("codex", help="кодекс утилит"); cx.add_argument("util", nargs="?"); cx.set_defaults(fn=cmd_codex)
 
     bo = sub.add_parser("boss", help="управление боем"); bo.add_argument("action", choices=["start", "resume", "abort"]); bo.set_defaults(fn=cmd_boss)
+
+    dl = sub.add_parser("dlc", help="«Арсенал» — DLC-кампания по инструментам ИБ")
+    dl.add_argument("action", nargs="?", help="start | leave | <модуль> | (пусто — список)")
+    dl.add_argument("module", nargs="?", help="модуль для start, напр. d1")
+    dl.set_defaults(fn=cmd_dlc)
 
     sp = sub.add_parser("surprise", help="ивент «Детская неожиданность»")
     sp.add_argument("track", nargs="?", help="crypto|net|linux | status | drop")

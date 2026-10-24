@@ -1,0 +1,13 @@
+id: d1-q02
+type: practice
+title: Открытые порты
+brief: >-
+  Просканируй хост alpha обычным сканом и сдай число открытых портов: sq answer <N>.
+requires_quests: [d1-q01]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, answer_sha256: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"}
+hints:
+  - 'Обычный скан портов: nmap alpha.'
+  - 'Считай строки со статусом "open".'
+codex: codex/nmap.md

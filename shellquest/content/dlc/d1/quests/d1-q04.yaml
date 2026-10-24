@@ -1,0 +1,14 @@
+id: d1-q04
+type: practice
+title: Скрипты по умолчанию
+brief: >-
+  Запусти стандартные NSE-скрипты (-sC) по beta. http-title выдаёт заголовок
+  веб-страницы — сдай его: sq answer <title>.
+requires_quests: [d1-q03]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, ci: true, answer_sha256: "ec4a4ca3e4b1a8d523aa7833f519659dc25639c008984b699c1007d0e8e407c2"}
+hints:
+  - '-sC запускает набор default-скриптов NSE.'
+  - 'nmap -sC -sV beta ; ищи строку http-title.'
+codex: codex/nmap.md

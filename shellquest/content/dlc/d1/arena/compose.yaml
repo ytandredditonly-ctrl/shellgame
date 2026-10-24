@@ -1,0 +1,32 @@
+# DLC d1 arena — recon-net. Three nmap training hosts on an isolated network
+# (no outbound). Brought up by sq-helperd on `sq dlc start d1`. All three build
+# from the same node image; each gets a distinct, deterministic port map.
+name: sq-dlc-d1
+networks:
+  reconnet:
+    internal: true
+services:
+  alpha:
+    build: ./node
+    container_name: sq-d1-alpha
+    hostname: alpha
+    networks: { reconnet: { aliases: [alpha.lab] } }
+    environment:
+      SQ_PORTS: "22=ssh,80=http:Apache/2.4.52:Alpha-Home"
+    expose: ["22", "80"]
+  beta:
+    build: ./node
+    container_name: sq-d1-beta
+    hostname: beta
+    networks: { reconnet: { aliases: [beta.lab] } }
+    environment:
+      SQ_PORTS: "80=http:nginx/1.18.0:Beta-Node,2222=ssh,3306=mysql"
+    expose: ["80", "2222", "3306"]
+  gamma:
+    build: ./node
+    container_name: sq-d1-gamma
+    hostname: gamma
+    networks: { reconnet: { aliases: [gamma.lab] } }
+    environment:
+      SQ_PORTS: "80=http:nginx/1.18.0:Gamma-Core,9000=flag:ARS-NMAP-MAP"
+    expose: ["80", "9000"]

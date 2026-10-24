@@ -1,0 +1,31 @@
+id: d1-boss
+name: Картограф Арсенала
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: >-
+  Составь полную карту recon-net и вскрой спрятанный маяк. Картограф признаёт
+  только того, кто видит сеть целиком.
+phases:
+  - id: p1
+    brief: 'Сколько живых хостов в recon-net? sq answer <N>.'
+    validators:
+      - {type: output_matches, answer_sha256: "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"}
+    hints:
+      - 'Тот же пинг-свип, что в d1-q01.'
+      - 'nmap -sn по сети; посчитай "Host is up".'
+  - id: p2
+    brief: 'Сдай карту портов всех трёх хостов (сверяется с эталоном арены).'
+    validators:
+      - {type: script, path: check-portmap.py}
+    hints:
+      - 'Пройди -sV по alpha, beta, gamma.'
+      - 'Эталон сверяет sq-helperd по известной карте recon-net.'
+  - id: p3
+    brief: 'На одном из хостов скан вскрывает маяк-флаг. Сдай его: sq flag <значение>.'
+    validators:
+      - {type: flag, sha256: "00111893883c68cd65b0b73f8ed834a076906a835030dce103b1acd9480ba253"}
+    hints:
+      - 'Пройди по всем портам, включая высокие (nmap -p- gamma).'
+      - 'Баннер сервиса на нестандартном порту gamma содержит флаг ARS-NMAP-*.'

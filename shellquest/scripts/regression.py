@@ -48,7 +48,7 @@ def feed(db, *cmds, cwd=None):
 
 print("== content loads + validates ==")
 c = Content()
-check("10 levels", sorted(c.levels) == list(range(10)))
+check("10 main levels", set(range(10)).issubset(c.levels))
 se_pool = SurpriseEngine(fresh(), c).pool
 check("6 surprises", len(se_pool) == 6)
 for lid, lv in c.levels.items():
@@ -136,6 +136,39 @@ open(log,"w").write("2026-01-01 00:00:00 install nmap:amd64 <none> 7.9\n"
 msgs = watcher.scan(db, c)
 check("lenient flags shop pkg (nmap)", any("nmap" in m for m in msgs))
 check("lenient ignores base pkg (vim)", not any("vim" in m for m in msgs))
+
+print("\n== DLC «Арсенал» track ==")
+dlc_mods = c.dlc_modules()
+if dlc_mods:
+    d1 = c.module_by_dlc_id("d1")
+    check("d1 module loads (id 101, track dlc)", bool(d1) and d1.id == 101 and d1.is_dlc)
+    check("d1 boss has 3 phases", bool(d1.boss) and len(d1.boss.phases) == 3)
+    check("d1 arena declared", d1.arena == "arena/compose.yaml")
+    db = fresh(); eng = Engine(db, c); db.set_profile(level=6, level_xp=33)
+    check("DLC locked before L5 boss defeated", not eng.dlc_available())
+    db.kv_set("boss_defeated_5", "1")
+    check("DLC available after L5 boss defeated", eng.dlc_available())
+    check("d1 unlocked, d2+ not (linear)",
+          eng.dlc_module_unlocked(d1)
+          and all(not eng.dlc_module_unlocked(m) for m in dlc_mods if m.dlc_id != "d1"))
+    ok, _ = eng.switch_track("dlc", d1.id)
+    check("switch to DLC d1", ok and eng.level_id == 101 and eng.active_track() == "dlc")
+    eng._ensure_level_quests(d1)
+    check("d1 quests load (5)", len(d1.quests) == 5)
+    # nmap scan (command_used) + the live-host answer completes d1-q01
+    feed(db, "nmap -sn reconnet")
+    r = eng.check(answer="3")
+    check("d1-q01 completes on nmap + answer 3", "d1-q01" in r.newly_done_quests)
+    dlc_xp = db.profile()["level_xp"]
+    ok, _ = eng.switch_track("main")
+    check("switch back to main restores L6 + xp",
+          ok and eng.level_id == 6 and db.profile()["level_xp"] == 33
+          and eng.active_track() == "main")
+    ok, _ = eng.switch_track("dlc")
+    check("resume DLC restores d1 + its xp",
+          ok and eng.level_id == 101 and db.profile()["level_xp"] == dlc_xp)
+else:
+    check("DLC present (skipped — no dlc content)", True)
 
 print(f"\n==== RESULT: {P} passed, {F} failed ====")
 sys.exit(1 if F else 0)

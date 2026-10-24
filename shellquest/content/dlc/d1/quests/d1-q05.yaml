@@ -1,0 +1,14 @@
+id: d1-q05
+type: combo
+title: Полный профиль хоста
+brief: >-
+  Собери полный профиль gamma одной командой (-sV -sC). Сдай версию её
+  веб-сервера: sq answer <version>.
+requires_quests: [d1-q04]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, ci: true, answer_sha256: "bdad97e2d24a41addf93f80b803917ca435866d87f687c0614c4052007ec3202"}
+hints:
+  - 'Объедини версии и скрипты: nmap -sV -sC gamma.'
+  - 'Версия — в колонке VERSION напротив веб-сервиса (напр. nginx 1.18.0).'
+codex: codex/nmap.md

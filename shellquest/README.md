@@ -86,6 +86,8 @@ sq flag <value>        # submit a flag (also surprises)
 sq hint <id>           # buy the next hint (10/25/50 coins); `sq hint surprise`
 sq codex [<cmd>|sp-id] # opened commands / a command card / a surprise write-up
 sq boss start|resume|abort
+sq dlc                 # «Арсенал» DLC: list modules / progress (opens after main L5)
+sq dlc start <module>  # enter a DLC module (e.g. d1); sq dlc leave — back to main
 sq shop | sq buy <pkg> # tool shop (installs via sq-helperd)
 sq surprise [crypto|net|linux] | status | drop   # «Детская неожиданность» (§7a)
 sq helper              # is sq-helperd up?
@@ -149,6 +151,33 @@ tidy up (copy, delete `.tmp`, rename), and `grep` out a hidden `PASS=`. Using a
 level's target commands successfully **opens** them (XP + a codex card). When
 you've opened ≥80% of them and hit the XP threshold, the boss **«Собиратель»**
 unlocks: find the scattered `part_*` fragments, reassemble the key, submit it.
+
+### DLC «Арсенал» — a second track (10 security tools)
+
+A separate campaign alongside the main story, specified in `dlc-top10.md`: ten
+mini-levels, one per key security tool (nmap → Wireshark → Burp → Metasploit →
+John/Hashcat → Hydra → sqlmap → Aircrack → Nikto/gobuster/ffuf → tcpdump) plus a
+final exam. It **opens after you beat the main level-5 boss** (end of Act I) and
+uses the exact same mechanics (quests, bosses, XP/coins, shop, validators).
+
+- DLC modules are ordinary content levels under `content/dlc/dN/` with reserved
+  ids (`d1=101 … d10=110`, `final=111`) and `track: dlc` — the engine has no
+  per-module code.
+- **Free switching:** `sq dlc start d1` enters the DLC; `sq dlc leave` returns to
+  the main campaign. Each track keeps its own level pointer and XP, so you can
+  continue main levels 6–9 and the DLC in parallel. (Switching is blocked while a
+  boss fight is active — finish or `sq boss abort` first.)
+- Each module's **tool is bought** with coins (`sq shop`/`sq buy`), not handed to
+  you — carry coins over from the main campaign.
+- Modules unlock linearly (`dN` needs `d(N-1)`'s boss defeated). A module's arena
+  comes up for the whole module on `sq dlc start` and down on `sq dlc leave`.
+
+Shipped now: the foundation (track support, `sq dlc`, loader, schema, tests) and
+**module d1 «Разведка» (nmap)** end-to-end — five quests, the 3-phase boss
+«Картограф Арсенала», codex card, and the buildable `recon-net` arena (three
+`internal:true` targets alpha/beta/gamma with deterministic ports/services, built
+and smoke-tested by `scripts/verify-arenas.sh`). Modules d2–d10 + the finale reuse
+this template. Flags/answers ship **only as SHA-256**.
 
 ## How it works (architecture)
 

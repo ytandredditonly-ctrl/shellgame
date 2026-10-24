@@ -1,0 +1,14 @@
+id: d1-q03
+type: practice
+title: Сервис на нестандартном порту
+brief: >-
+  Определи версии сервисов на хосте beta (-sV). На нестандартном порту прячется
+  знакомый сервис — сдай его имя: sq answer <service>.
+requires_quests: [d1-q02]
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, ci: true, answer_sha256: "7f5a55cf3f88be936fb9440249cb449f3067ccee4b525d0027dc9278a29c32c1"}
+hints:
+  - 'Определение версий: nmap -sV beta.'
+  - 'Смотри колонку SERVICE напротив необычного номера порта (не 80/3306).'
+codex: codex/nmap.md

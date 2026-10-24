@@ -1,0 +1,13 @@
+id: d1-q01
+type: tutorial
+title: Пинг-свип сети
+brief: >-
+  Найди живые хосты в учебной сети recon-net (host discovery, без сканирования
+  портов) и сдай их число: sq answer <N>.
+validators:
+  - {type: command_used, any_of: [nmap]}
+  - {type: output_matches, answer_sha256: "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"}
+hints:
+  - 'Host discovery — это ключ -sn (ping-свип без портов).'
+  - 'nmap -sn $SQ_ARENA_NET  (или по именам: alpha beta gamma). Посчитай "Host is up".'
+codex: codex/nmap.md

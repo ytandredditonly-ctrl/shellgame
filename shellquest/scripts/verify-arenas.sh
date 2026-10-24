@@ -43,6 +43,17 @@ docker exec sq-citadel sh -c 'test -f /root/root.txt && grep -q CITADEL-ROOT-FF 
 docker exec sq-citadel sh -c 'grep -q "svc ALL=(root) NOPASSWD: /usr/bin/find" /etc/sudoers.d/svc' && ok "privesc misconfig present" || no "privesc misconfig"
 ( cd "$ROOT/level9/arena" && compose -f citadel.yaml down -v )
 
+echo "== DLC d1 recon-net (nmap targets alpha/beta/gamma) =="
+( cd "$ROOT/dlc/d1/arena" && compose -f compose.yaml up -d --build )
+sleep 4
+probe() { docker exec sq-d1-beta python3 -c "import socket;s=socket.create_connection(('$1',$2),3);
+s.sendall(b'GET / HTTP/1.0\r\n\r\n');print(s.recv(256).decode('latin1'))" 2>/dev/null; }
+probe alpha 80  | grep -qi 'Server: Apache'      && ok "alpha:80 Apache banner"      || no "alpha:80"
+probe beta  2222| grep -qi 'SSH-2.0'             && ok "beta:2222 ssh banner"        || no "beta:2222 ssh"
+probe gamma 80  | grep -qi 'nginx/1.18.0'        && ok "gamma:80 nginx/1.18.0"       || no "gamma:80 version"
+probe gamma 9000| grep -q 'ARS-NMAP-MAP'         && ok "gamma:9000 flag beacon"      || no "gamma:9000 flag"
+( cd "$ROOT/dlc/d1/arena" && compose -f compose.yaml down -v )
+
 echo
 echo "RESULT: $pass passed, $fail failed"
 exit $fail

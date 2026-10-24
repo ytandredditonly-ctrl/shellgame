@@ -343,15 +343,28 @@ class Engine:
         if level.story_outro:
             msgs.append(level.story_outro)
 
+        # Beating main level 5 (end of Act I) opens the DLC «Арсенал».
+        if not level.is_dlc and level.id == 5 and self.content.dlc_modules():
+            msgs.append("🎖 Открыт «Арсенал» — курс по 10 инструментам ИБ: sq dlc")
+
         next_id = level.id + 1
         nxt = self.content.level(next_id)
         if nxt is None:
-            self.db.kv_set("game_complete", "1")
-            msgs.append("Это был последний доступный уровень контента. Поздравляем!")
-            self.db.log_event("game_complete")
+            if level.is_dlc:
+                self.db.kv_set("dlc_complete", "1")
+                msgs.append("🏁 «Арсенал» освоен — все инструменты Архитектора твои!")
+                self.db.log_event("dlc_complete")
+            else:
+                self.db.kv_set("game_complete", "1")
+                msgs.append("Это был последний доступный уровень контента. Поздравляем!")
+                self.db.log_event("game_complete")
             return True
 
         self.db.set_profile(level=next_id, level_xp=0, boss_unlocked=0)
+        # Keep the active track's pointer in sync with the live profile.
+        tk = "dlc" if level.is_dlc else "main"
+        self.db.kv_set(f"track_{tk}_level", str(next_id))
+        self.db.kv_set(f"track_{tk}_xp", "0")
         self.db.log_event("level_up", level=next_id)
         events.emit("level_up", level=next_id)
         self._ensure_level_quests(nxt)
@@ -373,10 +386,89 @@ class Engine:
             elif not helper.available():
                 msgs.append("Инструменты уровня поставит sq-helperd, когда он поднят: "
                             + ", ".join(nxt.unlock_packages))
-        msgs.append(f"Уровень повышен до {next_id} — «{nxt.name}».")
+        # DLC modules keep their arena up for the whole module (quests need the
+        # targets live), so raise the next module's arena on entry.
+        if nxt.is_dlc and nxt.arena:
+            from . import helper
+
+            comp = self.module_arena_compose(nxt)
+            if comp:
+                r = helper.arena_up(comp)
+                if r.reached and r.ok:
+                    msgs.append("Полигон модуля поднят." + (" (dry-run)" if r.dry_run else ""))
+                elif not r.reached:
+                    msgs.append("sq-helperd не запущен — полигон модуля поднимется позже.")
+        head = "Модуль" if nxt.is_dlc else "Уровень"
+        label = nxt.dlc_id or next_id
+        msgs.append(f"{head} повышен до {label} — «{nxt.name}».")
         if nxt.story_intro:
             msgs.append(nxt.story_intro)
         return True
+
+    # -- DLC «Арсенал» track ------------------------------------------
+    def active_track(self) -> str:
+        return self.db.kv_get("track", "main") or "main"
+
+    def dlc_available(self) -> bool:
+        """The DLC opens once the main level-5 boss is defeated (end of Act I)."""
+        return self.boss_defeated(5)
+
+    def dlc_module_unlocked(self, level: C.Level) -> bool:
+        """A DLC module is playable once its predecessor's boss is defeated
+        (the first module needs only the Act-I gate)."""
+        if not level.is_dlc or not self.dlc_available():
+            return False
+        mods = self.content.dlc_modules()
+        idx = next((i for i, m in enumerate(mods) if m.id == level.id), -1)
+        if idx <= 0:
+            return idx == 0
+        return self.boss_defeated(mods[idx - 1].id)
+
+    def module_arena_compose(self, level: C.Level) -> str | None:
+        """Content-relative path of a DLC module's own arena (up for the whole
+        module, not just the boss), if any."""
+        if not level.arena:
+            return None
+        rel = level.dir / level.arena
+        try:
+            return str(rel.relative_to(self.content.dir))
+        except ValueError:
+            return str(rel)
+
+    def switch_track(self, target: str, level_id: int | None = None) -> tuple[bool, str]:
+        """Switch between the main campaign and the DLC track.
+
+        Each track keeps its own level pointer + XP in kv; the live ``profile``
+        always mirrors the active track. Blocked during a boss fight so the
+        fight's transient ``boss_unlocked``/phase state cannot straddle tracks.
+        ``boss_unlocked`` re-derives on the next ``sq check``.
+        """
+        if target not in ("main", "dlc"):
+            return False, f"Неизвестный трек: {target}"
+        if self.boss_active():
+            return False, "Идёт бой с боссом — заверши или прерви его (sq boss abort)."
+        cur = self.active_track()
+        p = self.db.profile()
+        # Stash the current track's live pointer before leaving it.
+        self.db.kv_set(f"track_{cur}_level", str(p["level"]))
+        self.db.kv_set(f"track_{cur}_xp", str(p["level_xp"]))
+        if target == cur and level_id is None:
+            return True, cur
+        mods = self.content.dlc_modules()
+        saved = self.db.kv_get(f"track_{target}_level")
+        if level_id is None:
+            default = 0 if target == "main" else (mods[0].id if mods else 0)
+            level_id = int(saved) if saved is not None else default
+        xp = int(self.db.kv_get(f"track_{target}_xp", "0") or 0)
+        # Jumping to a module other than where we left off starts it fresh.
+        if saved is None or int(saved) != level_id:
+            xp = 0
+        self.db.set_profile(level=level_id, level_xp=xp, boss_unlocked=0)
+        self.db.kv_set("track", target)
+        self.db.kv_set(f"track_{target}_level", str(level_id))
+        self.db.kv_set(f"track_{target}_xp", str(xp))
+        self.db.log_event("track_switch", track=target, level=level_id)
+        return True, target
 
     # -- hints ---------------------------------------------------------
     def buy_hint(self, quest_id: str) -> tuple[bool, str]:

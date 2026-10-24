@@ -94,6 +94,16 @@ class Level:
     teardown: str | None = None
     quests: dict[str, Quest] = field(default_factory=dict)
     boss: Boss | None = None
+    # DLC («Арсенал», second track). For main levels: track="main", dlc_id=None.
+    track: str = "main"
+    dlc_id: str | None = None
+    # A module-level arena brought up for the whole module (DLC quests need the
+    # targets live before the boss, unlike main levels where only the boss has one).
+    arena: str | None = None
+
+    @property
+    def is_dlc(self) -> bool:
+        return self.track == "dlc"
 
 
 def _load_yaml(path: Path) -> dict:
@@ -117,6 +127,9 @@ def load_level(level_dir: Path) -> Level:
         story_outro=meta.get("story_outro", ""),
         setup=meta.get("setup"),
         teardown=meta.get("teardown"),
+        track=meta.get("track", "main"),
+        dlc_id=meta.get("dlc_id"),
+        arena=meta.get("arena"),
     )
 
     qdir = level_dir / "quests"
@@ -185,10 +198,32 @@ class Content:
             if (ld / "level.yaml").is_file():
                 lvl = load_level(ld)
                 self.levels[lvl.id] = lvl
+        # DLC «Арсенал» — a second track under content/dlc/. Modules are ordinary
+        # Levels with reserved integer ids (d1=101 … d10=110, final=111) so the
+        # engine's id-keyed state and `id + 1` advance work unchanged.
+        dlc_dir = self.dir / "dlc"
+        if dlc_dir.is_dir():
+            for md in sorted(dlc_dir.iterdir()):
+                if (md / "level.yaml").is_file():
+                    lvl = load_level(md)
+                    self.levels[lvl.id] = lvl
 
     def level(self, level_id: int) -> Level | None:
         return self.levels.get(level_id)
 
     @property
     def max_level(self) -> int:
-        return max(self.levels) if self.levels else 0
+        """Highest *main*-track level id (DLC ids live in a reserved high band)."""
+        main = [lid for lid in self.levels if self.levels[lid].track == "main"]
+        return max(main) if main else 0
+
+    # -- DLC «Арсенал» --------------------------------------------------
+    def dlc_modules(self) -> list[Level]:
+        """DLC modules in play order (by id: d1…d10, then the finale)."""
+        return [lv for _, lv in sorted(self.levels.items()) if lv.is_dlc]
+
+    def module_by_dlc_id(self, dlc_id: str) -> Level | None:
+        for lv in self.levels.values():
+            if lv.is_dlc and lv.dlc_id == dlc_id:
+                return lv
+        return None

@@ -45,6 +45,10 @@ LEVEL_SCHEMA: dict[str, Any] = {
         "story_outro": {"type": "string"},
         "setup": {"type": ["string", "null"]},
         "teardown": {"type": ["string", "null"]},
+        # DLC «Арсенал» (second track) — optional; main levels omit them.
+        "track": {"enum": ["main", "dlc"]},
+        "dlc_id": {"type": "string"},
+        "arena": {"type": ["string", "null"]},
     },
 }
 

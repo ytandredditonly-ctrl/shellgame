@@ -1,0 +1,20 @@
+id: 101
+dlc_id: d1
+track: dlc
+name: Разведка
+# The module tool is bought with coins (not auto-unlocked), as in the spec.
+target_commands: [nmap]
+command_threshold: 0.8
+xp_required: 150
+shop:
+  - {name: nmap, package: nmap, price: 120, desc: "Сканер сети, портов, сервисов и версий"}
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: >-
+  Первый стенд «Арсенала». Архитектор запер за ним сканер nmap и учебную сеть из
+  трёх машин — alpha, beta, gamma. Разведка всегда идёт первой: нельзя
+  атаковать то, чего не видишь. ВСЕ цели — локальные контейнеры без выхода в интернет.
+story_outro: >-
+  Карта сети у тебя в руках. Ты видишь хосты, порты, сервисы и версии — nmap твой.
+  Следующий стенд: трафик (Wireshark).
