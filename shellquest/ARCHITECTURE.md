@@ -426,4 +426,5 @@ state, dpkg offset, clamp warnings, …).
 ---
 
 *For the product rationale and the full quest/boss catalogue, see
-`shellquest_TZ.md` and `quests-full.md`. For install and play, see `README.md`.*
+`shellquest_TZ.md` and `quests-full.md`. For the DLC «Арсенал» design in detail,
+see `DLC.md`. For install and play, see `README.md`.*

@@ -162,11 +162,12 @@ unlocks: find the scattered `part_*` fragments, reassemble the key, submit it.
 
 ### DLC «Арсенал» — a second track (10 security tools)
 
-A separate campaign alongside the main story, specified in `dlc-top10.md`: ten
-mini-levels, one per key security tool (nmap → Wireshark → Burp → Metasploit →
-John/Hashcat → Hydra → sqlmap → Aircrack → Nikto/gobuster/ffuf → tcpdump) plus a
-final exam. It **opens after you beat the main level-5 boss** (end of Act I) and
-uses the exact same mechanics (quests, bosses, XP/coins, shop, validators).
+A separate campaign alongside the main story: ten mini-levels, one per key
+security tool (nmap → Wireshark → Burp → Metasploit → John/Hashcat → Hydra →
+sqlmap → Aircrack → Nikto/gobuster/ffuf → tcpdump) plus a final exam. It
+**opens after you beat the main level-5 boss** (end of Act I) and uses the exact
+same mechanics (quests, bosses, XP/coins, shop, validators). **Full design &
+architecture: [`DLC.md`](DLC.md).**
 
 - DLC modules are ordinary content levels under `content/dlc/dN/` with reserved
   ids (`d1=101 … d10=110`, `final=111`) and `track: dlc` — the engine has no
