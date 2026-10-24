@@ -1,0 +1,13 @@
+# DLC d10 arena — serverbox. Single app node on an isolated network
+# (internal:true, no outbound). Brought up by sq-helperd on `sq dlc start d10`.
+name: sq-dlc-d10
+networks:
+  labnet:
+    internal: true
+services:
+  serverbox:
+    build: ./node
+    container_name: sq-d10-serverbox
+    hostname: serverbox
+    networks: { labnet: { aliases: [serverbox.lab] } }
+    expose: ["80"]

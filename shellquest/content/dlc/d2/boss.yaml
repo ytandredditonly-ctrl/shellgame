@@ -1,0 +1,33 @@
+id: d2-boss
+name: Подслушивающий
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: 'Разбери дамп целиком: TLS, домены и спрятанный в HTTP флаг.'
+phases:
+- id: p1
+  brief: Сколько TLS-хендшейков (ClientHello) в дампе? sq answer <N>.
+  validators:
+  - type: output_matches
+    answer_sha256: 4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce
+  hints:
+  - Фильтр tls.handshake.type == 1.
+  - Посчитай ClientHello.
+- id: p2
+  brief: 'Восстанови домен из SNI/DNS: sq answer <домен>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: eba0ddd194d7f700864e54944e7f86933f77394311a1dc473f4e27d8253e66f1
+  hints:
+  - tls.handshake.extensions_server_name.
+  - Тот же домен виден и в DNS-запросе.
+- id: p3
+  brief: 'Вытащи флаг из реконструированного HTTP-ответа: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: 570f2aa5445a0eb449964204204cc1e1dad8bbc140bd3c04764b0a79217f7774
+  hints:
+  - Follow TCP Stream по HTTP-потоку с ответом text/plain.
+  - Тело ответа содержит ARS-WIRE-*.

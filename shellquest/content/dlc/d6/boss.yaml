@@ -1,0 +1,34 @@
+id: d6-boss
+name: Стучащийся
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Найди валидного пользователя, подбери его пароль к SSH и войди.
+phases:
+- id: p1
+  brief: Валидный пользователь на loginbox? sq answer <login>.
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+  hints:
+  - Единственный заведённый пользователь.
+  - Он же в users.txt.
+- id: p2
+  brief: Его SSH-пароль? sq answer <пароль>.
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: 0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e
+  hints:
+  - hydra по ssh://loginbox.
+  - Пароль есть в wordlist.txt.
+- id: p3
+  brief: 'Войди и забери флаг (~/flag.txt на loginbox): sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: 450d39ff7a1e3e5a59d3cae708bd8bf52daae51e40e65b712f50b59591f22bce
+  hints:
+  - ssh admin@loginbox с подобранным паролем; cat flag.txt.
+  - HTTP-форма при admin:letmein тоже печатает ARS-HYDRA-*.

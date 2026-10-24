@@ -1,0 +1,13 @@
+# DLC d6 arena — loginbox. Real SSH (weak admin password) + HTTP form on an
+# isolated network (internal:true, no outbound). Brought up by sq-helperd.
+name: sq-dlc-d6
+networks:
+  labnet:
+    internal: true
+services:
+  loginbox:
+    build: ./node
+    container_name: sq-d6-loginbox
+    hostname: loginbox
+    networks: { labnet: { aliases: [loginbox.lab] } }
+    expose: ["22", "8080"]

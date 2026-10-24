@@ -1,0 +1,34 @@
+id: d9-boss
+name: Лабиринт
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Посчитай скрытые пути, найди управляющий параметр и забери флаг.
+phases:
+- id: p1
+  brief: Сколько скрытых путей у webmaze (/admin, /backup, /secret.bak, /robots.txt, /admin/panel)? sq
+    answer <N>.
+  validators:
+  - type: output_matches
+    answer_sha256: ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d
+  hints:
+  - Перебери директории и файлы.
+  - Сосчитай непубличные маршруты.
+- id: p2
+  brief: Какой GET-параметр открывает спрятанную страницу? sq answer <param>.
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: 0b8e9e995d8d77f1e4770f0f79665aee6f3f70247b3735422daba73df4c3096f
+  hints:
+  - Фаззинг параметра на /admin/panel.
+  - Тот же, что в q03.
+- id: p3
+  brief: 'Забери флаг со скрытого эндпоинта /admin/panel?debug=1: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: 7814c7f8ecac2277de4f42dba40aa03f3692e6cfc18b308e0c75f58b7acb52ec
+  hints:
+  - GET /admin/panel?debug=1.
+  - В теле — ARS-RECON-*.

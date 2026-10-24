@@ -1,0 +1,34 @@
+id: final-boss
+name: Полигон Архитектора
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: false
+hint_multiplier: 2.0
+story_brief: Разведка → веб → пароли → захват. Один стенд, четыре фазы, без подсказок.
+phases:
+- id: p1
+  brief: 'Разведай proving-ground (nmap): на каком порту веб-точка входа? sq answer <порт>.'
+  validators:
+  - type: output_matches
+    answer_sha256: 48449a14a4ff7d79bb7a1b6f3d488eba397c36ef25634c111b49baf362511afc
+  hints: []
+- id: p2
+  brief: 'Через веб-recon/инъекцию добудь учётные данные: sq answer <login:pass>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: fc73ddcc9e3eace20a60a4cad70880a637d3d437e2d0a5cbf21614e5bf2cf89b
+  hints: []
+- id: p3
+  brief: 'Сломай выгруженный хеш и сдай пароль: sq answer <пароль>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: c44ab118b431cd67e9521e7cff143d01c987aac94d342febff171872912134fc
+  hints: []
+- id: p4
+  brief: 'По SSH подтверди перехват tcpdump и сдай финальный флаг: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: cd00fe81cb6d66d1464255ec4ac5c10648e880865c716af5b8cb38f885cd2f0e
+  hints: []

@@ -1,0 +1,13 @@
+# DLC d9 arena — webmaze. Single app node on an isolated network
+# (internal:true, no outbound). Brought up by sq-helperd on `sq dlc start d9`.
+name: sq-dlc-d9
+networks:
+  labnet:
+    internal: true
+services:
+  webmaze:
+    build: ./node
+    container_name: sq-d9-webmaze
+    hostname: webmaze
+    networks: { labnet: { aliases: [webmaze.lab] } }
+    expose: ["80"]

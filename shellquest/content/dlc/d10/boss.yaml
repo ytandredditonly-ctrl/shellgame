@@ -1,0 +1,33 @@
+id: d10-boss
+name: Слухач в терминале
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Захвати трафик службы, извлеки открытый токен и сохрани доказательство.
+phases:
+- id: p1
+  brief: Захвати трафик с фильтром по службе (сверяется ареной).
+  validators:
+  - type: script
+    path: check-capture.py
+  hints:
+  - tcpdump port 80 -w файл.
+  - Наличие дампа грейдит sq-helperd.
+- id: p2
+  brief: 'Извлеки переданный в открытую токен: sq answer <токен>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: c591f8f03e6c002c5f46b7e904d3fd766d67d4ec16803970c534951491c9b0d7
+  hints:
+  - tcpdump -A port 80.
+  - Заголовок X-Token.
+- id: p3
+  brief: 'Сдай флаг из полезной нагрузки: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: e260ccc47792808bc1425e5726a752cfdd095735521af76c20a93f70e8ce4381
+  hints:
+  - Тело ответа содержит flag=ARS-TCPD-*.
+  - Грепни дамп по ARS-.

@@ -1,0 +1,18 @@
+id: 108
+dlc_id: d8
+track: dlc
+name: Wi-Fi
+target_commands:
+- aircrack-ng
+command_threshold: 0.8
+xp_required: 100
+shop:
+- name: aircrack-ng
+  package: aircrack-ng
+  price: 120
+  desc: Анализ и подбор ключей Wi-Fi
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Восьмой стенд. Aircrack-ng и готовый capture.cap (учебное рукопожатие WPA2). Разберёшь слабости
+  беспроводных сетей офлайн — в VM нет Wi-Fi-адаптера.
+story_outro: Ты читаешь эфир и ключи. Aircrack-ng твой. Дальше — веб-recon.

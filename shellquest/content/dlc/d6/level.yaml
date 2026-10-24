@@ -1,0 +1,19 @@
+id: 106
+dlc_id: d6
+track: dlc
+name: Онлайн-вход
+target_commands:
+- hydra
+command_threshold: 0.8
+xp_required: 120
+shop:
+- name: hydra
+  package: hydra
+  price: 120
+  desc: Онлайн-подбор к службам входа
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Шестой стенд. Hydra и контейнер loginbox (SSH + HTTP-форма) со слабым входом. Поймёшь, зачем
+  лимиты и блокировки. Только учебная арена.
+story_outro: Ты подбираешь вход к живой службе. Hydra твой. Дальше — SQL-инъекции (sqlmap).

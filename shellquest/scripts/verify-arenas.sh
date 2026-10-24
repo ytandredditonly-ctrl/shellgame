@@ -54,6 +54,83 @@ probe gamma 80  | grep -qi 'nginx/1.18.0'        && ok "gamma:80 nginx/1.18.0"  
 probe gamma 9000| grep -q 'ARS-NMAP-MAP'         && ok "gamma:9000 flag beacon"      || no "gamma:9000 flag"
 ( cd "$ROOT/dlc/d1/arena" && compose -f compose.yaml down -v )
 
+# httpget <container> <host> <port> <path>: probe an internal arena from inside
+# it, reading the full response (headers + body may arrive in separate segments).
+httpget() { docker exec "$1" python3 -c "import socket
+s=socket.create_connection(('$2',$3),5)
+s.sendall(b'GET $4 HTTP/1.0\r\nHost: $2\r\n\r\n')
+buf=b''
+while True:
+    d=s.recv(4096)
+    if not d: break
+    buf+=d
+print(buf.decode('latin1'))" 2>/dev/null; }
+
+echo "== DLC d3 shopfront (Burp target) =="
+( cd "$ROOT/dlc/d3/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+docker exec sq-d3-shopfront python3 -c "import socket
+s=socket.create_connection(('127.0.0.1',80),5)
+s.sendall(b'GET /admin HTTP/1.0\r\nCookie: role=admin\r\n\r\n')
+buf=b''
+while True:
+    d=s.recv(4096)
+    if not d: break
+    buf+=d
+print(buf.decode('latin1'))" 2>/dev/null | grep -q 'ARS-BURP-TAMPER' && ok "shopfront /admin role=admin flag" || no "shopfront admin flag"
+httpget sq-d3-shopfront 127.0.0.1 80 "/deals?code=ARSENAL50" | grep -q 'DEAL UNLOCKED' && ok "shopfront coupon ARSENAL50" || no "shopfront coupon"
+( cd "$ROOT/dlc/d3/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d4 breach (vsftpd 2.3.4 banner + backdoor flag) =="
+( cd "$ROOT/dlc/d4/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+docker exec sq-d4-breach python3 -c "import socket;s=socket.create_connection(('127.0.0.1',21),4);print(s.recv(64).decode('latin1'))" 2>/dev/null | grep -q '2.3.4' && ok "breach 21 vsFTPd 2.3.4" || no "breach ftp banner"
+docker exec sq-d4-breach python3 -c "import socket;s=socket.create_connection(('127.0.0.1',6200),4);print(s.recv(64).decode('latin1'))" 2>/dev/null | grep -q 'ARS-MSF-SHELL' && ok "breach 6200 backdoor flag" || no "breach backdoor flag"
+( cd "$ROOT/dlc/d4/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d7 dbshop (real SQLi, SQLite) =="
+( cd "$ROOT/dlc/d7/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+httpget sq-d7-dbshop 127.0.0.1 80 "/item?id=1" | grep -qi 'Lockpick' && ok "dbshop /item?id=1 row" || no "dbshop base query"
+httpget sq-d7-dbshop 127.0.0.1 80 "/item?id=1%20UNION%20SELECT%20secret,secret%20FROM%20vault--" | grep -q 'ARS-SQLI-DUMP' && ok "dbshop UNION injection -> vault flag" || no "dbshop UNION injection"
+( cd "$ROOT/dlc/d7/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d9 webmaze (nikto/gobuster/ffuf target) =="
+( cd "$ROOT/dlc/d9/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+httpget sq-d9-webmaze 127.0.0.1 80 "/" | grep -q 'ArsenalCMS' && ok "webmaze Server: ArsenalCMS" || no "webmaze server banner"
+httpget sq-d9-webmaze 127.0.0.1 80 "/secret.bak" | grep -q 'backup-key-7781' && ok "webmaze forgotten .bak token" || no "webmaze .bak"
+httpget sq-d9-webmaze 127.0.0.1 80 "/admin/panel?debug=1" | grep -q 'ARS-RECON-HIDDEN' && ok "webmaze hidden endpoint flag" || no "webmaze hidden flag"
+( cd "$ROOT/dlc/d9/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d2 chatter (live-capture token) =="
+( cd "$ROOT/dlc/d2/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+httpget sq-d2-chatter 127.0.0.1 8080 "/feed" | grep -q 'CHATTER-FEED-42' && ok "chatter X-Feed token" || no "chatter token"
+( cd "$ROOT/dlc/d2/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d10 serverbox (tcpdump traffic token/flag) =="
+( cd "$ROOT/dlc/d10/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+httpget sq-d10-serverbox 127.0.0.1 80 "/status" | grep -q 'ARS-TCPD-CATCH' && ok "serverbox token+flag payload" || no "serverbox payload"
+( cd "$ROOT/dlc/d10/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC d6 loginbox (real sshd + http form) =="
+( cd "$ROOT/dlc/d6/arena" && compose -f compose.yaml up -d --build )
+sleep 5
+docker exec sq-d6-loginbox python3 -c "import socket;s=socket.create_connection(('127.0.0.1',22),5);print(s.recv(64).decode('latin1'))" 2>/dev/null | grep -q 'SSH-2.0' && ok "loginbox sshd listening :22" || no "loginbox sshd"
+docker exec sq-d6-loginbox python3 -c "import urllib.request,urllib.parse;
+d=urllib.parse.urlencode({'user':'admin','pass':'letmein'}).encode();
+print(urllib.request.urlopen('http://127.0.0.1:8080/login',d).read().decode())" 2>/dev/null | grep -q 'ARS-HYDRA-IN' && ok "loginbox http form admin:letmein flag" || no "loginbox http form"
+( cd "$ROOT/dlc/d6/arena" && compose -f compose.yaml down -v )
+
+echo "== DLC finale proving-ground (web + edge banners) =="
+( cd "$ROOT/dlc/final/arena" && compose -f compose.yaml up -d --build )
+sleep 3
+httpget sq-final-web 127.0.0.1 80 "/admin" | grep -q 'provingpass' && ok "proving-ground leaked credential" || no "proving-ground cred"
+docker exec sq-final-web python3 -c "import socket;s=socket.create_connection(('edge',7777),4);print(s.recv(64).decode('latin1'))" 2>/dev/null | grep -q 'ARS-PROVING-DONE' && ok "finale edge flag beacon" || no "finale flag beacon"
+( cd "$ROOT/dlc/final/arena" && compose -f compose.yaml down -v )
+
 echo
 echo "RESULT: $pass passed, $fail failed"
 exit $fail

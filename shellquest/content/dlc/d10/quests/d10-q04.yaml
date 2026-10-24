@@ -1,0 +1,16 @@
+id: d10-q04
+type: practice
+title: Запись в файл
+brief: Сохрани захват в ~/sq-arsenal/d10/out.pcap и перечитай его (tcpdump -r).
+requires_quests:
+- d10-q03
+validators:
+- type: file_exists
+  path: ~/sq-arsenal/d10/out.pcap
+- type: command_used
+  any_of:
+  - tcpdump
+hints:
+- tcpdump -w ~/sq-arsenal/d10/out.pcap.
+- tcpdump -r ~/sq-arsenal/d10/out.pcap.
+codex: codex/tcpdump.md

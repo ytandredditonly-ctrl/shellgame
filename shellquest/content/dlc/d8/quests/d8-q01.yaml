@@ -1,0 +1,16 @@
+id: d8-q01
+type: tutorial
+title: Разобрать cap
+brief: 'Открой capture.cap и сдай ESSID сети: sq answer <ESSID>.'
+validators:
+- type: command_used
+  any_of:
+  - aircrack-ng
+  - tshark
+- type: output_matches
+  ci: true
+  answer_sha256: 8995731c185b54488fa672fc9b629039f274c086b912e29c340cc22654d4b8aa
+hints:
+- aircrack-ng capture.cap.
+- Колонка ESSID (или tshark -r capture.cap).
+codex: codex/aircrack.md

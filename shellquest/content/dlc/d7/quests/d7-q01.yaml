@@ -1,0 +1,13 @@
+id: d7-q01
+type: tutorial
+title: Найти форму
+brief: 'Получи страницу с параметром (curl dbshop/item?id=1) и сдай имя уязвимого параметра: sq answer
+  <param>.'
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: a56145270ce6b3bebd1dd012b73948677dd618d496488bc608a3cb43ce3547dd
+hints:
+- curl 'http://dbshop/item?id=1'.
+- Параметр в строке запроса — id.
+codex: codex/sqlmap.md

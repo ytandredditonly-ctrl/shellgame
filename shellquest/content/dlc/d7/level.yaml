@@ -1,0 +1,19 @@
+id: 107
+dlc_id: d7
+track: dlc
+name: SQL-инъекции
+target_commands:
+- sqlmap
+command_threshold: 0.8
+xp_required: 120
+shop:
+- name: sqlmap
+  package: sqlmap
+  price: 140
+  desc: Автоматизация SQL-инъекций
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Седьмой стенд. sqlmap и веб-приложение dbshop с уязвимым параметром. Поймёшь, как БД взламывают
+  через SQLi. Только локально.
+story_outro: Ты выгружаешь данные через инъекцию. sqlmap твой. Дальше — Wi-Fi (Aircrack).

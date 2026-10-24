@@ -1,0 +1,22 @@
+id: 105
+dlc_id: d5
+track: dlc
+name: Пароли офлайн
+target_commands:
+- john
+command_threshold: 0.8
+xp_required: 150
+shop:
+- name: john
+  package: john
+  price: 120
+  desc: John the Ripper — подбор паролей
+- name: hashcat
+  package: hashcat
+  price: 160
+  desc: Hashcat — GPU-подбор паролей
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Пятый стенд. Набор хешей, shadow и словарь. Поймёшь, как хранят пароли и почему соль и медленные
+  хеши спасают. Всё офлайн, в папке модуля.
+story_outro: Ты ломаешь слабые хеши и видишь, что держит сильные. John/Hashcat твой. Дальше — Hydra.

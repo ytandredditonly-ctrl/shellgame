@@ -1,0 +1,15 @@
+id: d9-q05
+type: combo
+title: Цепочка recon
+brief: 'Собери цепочку (путь /admin + параметр debug=1) до скрытой страницы и сдай её маркер: sq answer
+  <маркер>.'
+requires_quests:
+- d9-q04
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: d4cd7aeb1d6dc1f3d3cced457f61bacb013bf854a939d4cdbdbaa86a92d3e294
+hints:
+- GET /admin/panel?debug=1.
+- Тело страницы начинается с RECON-OK.
+codex: codex/webrecon.md

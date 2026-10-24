@@ -1,0 +1,18 @@
+id: d5-q02
+type: practice
+title: Словарная атака
+brief: 'Взломай hashes.txt словарём wordlist.txt и сдай первый найденный пароль: sq answer <пароль>.'
+requires_quests:
+- d5-q01
+validators:
+- type: command_used
+  any_of:
+  - john
+  - hashcat
+- type: output_matches
+  ci: true
+  answer_sha256: 1c8bfe8f801d79745c4631d09fff36c82aa37fc4cce4fc946683d7b336b63032
+hints:
+- john --wordlist=wordlist.txt hashes.txt.
+- john --show hashes.txt.
+codex: codex/john.md

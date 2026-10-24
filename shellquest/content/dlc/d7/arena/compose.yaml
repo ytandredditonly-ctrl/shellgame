@@ -1,0 +1,13 @@
+# DLC d7 arena — dbshop. Single app node on an isolated network
+# (internal:true, no outbound). Brought up by sq-helperd on `sq dlc start d7`.
+name: sq-dlc-d7
+networks:
+  labnet:
+    internal: true
+services:
+  dbshop:
+    build: ./node
+    container_name: sq-d7-dbshop
+    hostname: dbshop
+    networks: { labnet: { aliases: [dbshop.lab] } }
+    expose: ["80"]

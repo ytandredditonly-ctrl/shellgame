@@ -1,0 +1,17 @@
+id: d4-q03
+type: practice
+title: Проверить цель
+brief: 'use модуль, set RHOSTS breach, запусти check и сдай вердикт: sq answer <vulnerable/...>.'
+requires_quests:
+- d4-q02
+validators:
+- type: command_used
+  any_of:
+  - msfconsole
+- type: output_matches
+  ci: true
+  answer_sha256: f2b826b18b9de86628dd9b798f3cb6cfd582fb7cee4ea68489387c0b19dc09c1
+hints:
+- use exploit/unix/ftp/vsftpd_234_backdoor; set RHOSTS breach.
+- check печатает, уязвима ли цель.
+codex: codex/metasploit.md

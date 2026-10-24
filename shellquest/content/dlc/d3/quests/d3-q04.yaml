@@ -1,0 +1,14 @@
+id: d3-q04
+type: practice
+title: Управляющая cookie
+brief: 'Найди cookie, управляющую доступом к /admin, и сдай её имя: sq answer <имя>.'
+requires_quests:
+- d3-q03
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 4b168d88dc872a7753c2bc35b36a2d4249487af55baf78f247f38cae2fe962da
+hints:
+- Смотри Set-Cookie и заголовки в HTTP history.
+- Значение этой cookie — роль пользователя.
+codex: codex/burpsuite.md

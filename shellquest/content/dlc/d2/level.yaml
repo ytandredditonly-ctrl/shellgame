@@ -1,0 +1,19 @@
+id: 102
+dlc_id: d2
+track: dlc
+name: Трафик
+target_commands:
+- tshark
+command_threshold: 0.8
+xp_required: 150
+shop:
+- name: wireshark
+  package: wireshark
+  price: 120
+  desc: Анализатор трафика (ставит и консольный tshark)
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Второй стенд «Арсенала». Архитектор запечатал анализатор трафика и дамп sample.pcap. Увидишь
+  то, что реально летит по сети — пакет за пакетом. Всё локально, без выхода наружу.
+story_outro: 'Ты читаешь трафик: DNS, HTTP, TLS. Wireshark твой. Дальше — веб-прокси (Burp).'

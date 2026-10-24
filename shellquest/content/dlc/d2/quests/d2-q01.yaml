@@ -1,0 +1,15 @@
+id: d2-q01
+type: tutorial
+title: Открыть pcap
+brief: 'Открой sample.pcap из папки модуля и сдай число пакетов: sq answer <N>.'
+validators:
+- type: command_used
+  any_of:
+  - tshark
+  - wireshark
+- type: output_matches
+  answer_sha256: 8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61
+hints:
+- 'Открой: tshark -r sample.pcap (или File→Open в GUI).'
+- tshark -r sample.pcap | wc -l — счётчик пакетов.
+codex: codex/wireshark.md

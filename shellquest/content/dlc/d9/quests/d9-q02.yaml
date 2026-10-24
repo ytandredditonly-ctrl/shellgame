@@ -1,0 +1,18 @@
+id: d9-q02
+type: practice
+title: Перебор директорий
+brief: 'gobuster dir по webmaze — сдай найденный скрытый путь: sq answer </путь>.'
+requires_quests:
+- d9-q01
+validators:
+- type: command_used
+  any_of:
+  - gobuster
+  - dirb
+- type: output_matches
+  ci: true
+  answer_sha256: 84a04c248965d2392b463bd74424c512aab08a08ac8c231ccd34591a617c9913
+hints:
+- gobuster dir -u http://webmaze -w <wordlist>.
+- Код 200/301 на /admin.
+codex: codex/webrecon.md

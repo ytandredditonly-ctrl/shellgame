@@ -1,0 +1,17 @@
+id: d4-q04
+type: combo
+title: Получить сессию
+brief: 'Получи сессию и сдай имя пользователя (getuid): sq answer <user>.'
+requires_quests:
+- d4-q03
+validators:
+- type: command_used
+  any_of:
+  - msfconsole
+- type: output_matches
+  ci: true
+  answer_sha256: 4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2
+hints:
+- run → sessions -i 1.
+- getuid. Бэкдор vsftpd даёт root.
+codex: codex/metasploit.md

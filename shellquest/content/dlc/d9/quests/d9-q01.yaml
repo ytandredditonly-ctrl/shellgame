@@ -1,0 +1,15 @@
+id: d9-q01
+type: tutorial
+title: Быстрый осмотр
+brief: 'Пройди nikto по webmaze и сдай значение баннера Server: sq answer <server>.'
+validators:
+- type: command_used
+  any_of:
+  - nikto
+- type: output_matches
+  ci: true
+  answer_sha256: 70100435a524f099b380d8835c4a28a6fd80c457d7dd07e63dadff2df48c8e2e
+hints:
+- nikto -h http://webmaze.
+- Смотри заголовок Server (ArsenalCMS...).
+codex: codex/webrecon.md

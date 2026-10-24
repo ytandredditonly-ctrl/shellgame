@@ -1,0 +1,15 @@
+# DLC d4 arena — breach. Deterministic banners/ports on an isolated
+# network (internal:true, no outbound). Brought up by sq-helperd.
+name: sq-dlc-d4
+networks:
+  labnet:
+    internal: true
+services:
+  breach:
+    build: ./node
+    container_name: sq-d4-breach
+    hostname: breach-core
+    networks: { labnet: { aliases: [breach-core.lab] } }
+    environment:
+      SQ_PORTS: "21=tcp:220 (vsFTPd 2.3.4),6200=flag:ARS-MSF-SHELL,80=http:Apache/2.4.52:breach-core"
+    expose: ["21", "6200", "80"]

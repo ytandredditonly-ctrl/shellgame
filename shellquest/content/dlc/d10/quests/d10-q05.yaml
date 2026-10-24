@@ -1,0 +1,17 @@
+id: d10-q05
+type: combo
+title: Поймать секрет без GUI
+brief: 'Отфильтруй нужный трафик и вытащи переданный токен (X-Token): sq answer <токен>.'
+requires_quests:
+- d10-q04
+validators:
+- type: command_used
+  any_of:
+  - tcpdump
+- type: output_matches
+  ci: true
+  answer_sha256: c591f8f03e6c002c5f46b7e904d3fd766d67d4ec16803970c534951491c9b0d7
+hints:
+- Комбинируй host и port; -A покажет нагрузку.
+- Токен в заголовке X-Token.
+codex: codex/tcpdump.md

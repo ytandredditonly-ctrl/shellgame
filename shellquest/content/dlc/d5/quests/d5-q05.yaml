@@ -1,0 +1,14 @@
+id: d5-q05
+type: combo
+title: Из shadow в пароль
+brief: 'Через unshadow вытащи хеш из shadow.sample, взломай и сдай пароль: sq answer <пароль>.'
+requires_quests:
+- d5-q04
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: a941a4c4fd0c01cddef61b8be963bf4c1e2b0811c037ce3f1835fddf6ef6c223
+hints:
+- unshadow passwd.sample shadow.sample > h.
+- john --wordlist=wordlist.txt h; затем --show.
+codex: codex/john.md

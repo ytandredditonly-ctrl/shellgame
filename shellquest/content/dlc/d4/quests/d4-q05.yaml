@@ -1,0 +1,14 @@
+id: d4-q05
+type: combo
+title: Пост-эксплуатация
+brief: 'В сессии собери факт о хосте — сдай его имя (hostname стенда): sq answer <hostname>.'
+requires_quests:
+- d4-q04
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 74a5356426272513732ee9c28fd199ee65ca1932252c31540c2712c4f5ec32dd
+hints:
+- sysinfo / hostname внутри сессии.
+- Имя стенда указано в README модуля.
+codex: codex/metasploit.md

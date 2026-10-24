@@ -1,0 +1,33 @@
+id: d4-boss
+name: Взломщик
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Выбери эксплойт, получи сессию, забери флаг с хоста.
+phases:
+- id: p1
+  brief: Какой exploit-модуль подходит под сервис стенда? sq answer <exploit/...>.
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: 6b65ce1da8867160cf987394392e27f6bade1e648ac11ebaf236461118231f7e
+  hints:
+  - Версия службы 21/tcp.
+  - search vsftpd.
+- id: p2
+  brief: Получи сессию на breach (сверяется ареной).
+  validators:
+  - type: script
+    path: check-session.py
+  hints:
+  - set RHOSTS breach; run.
+  - Сессию грейдит sq-helperd.
+- id: p3
+  brief: 'Забери флаг с хоста (бэкдор-шелл на 6200/tcp): sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: b91b8caf4c7a0f4457ef2dfe04963d633c57051592d3ae98ec48d4e9a8e1116e
+  hints:
+  - Бэкдор vsftpd 2.3.4 открывает шелл на 6200/tcp.
+  - В баннере шелла — ARS-MSF-*.

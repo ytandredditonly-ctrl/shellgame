@@ -1,0 +1,19 @@
+id: 110
+dlc_id: d10
+track: dlc
+name: Терминальный захват
+target_commands:
+- tcpdump
+command_threshold: 0.8
+xp_required: 150
+shop:
+- name: tcpdump
+  package: tcpdump
+  price: 60
+  desc: Захват трафика из консоли
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Десятый стенд. tcpdump и сервер serverbox без GUI — как у защитника на боевом сервере, где
+  есть только SSH. Терминальный «кузен» Wireshark. Только локально.
+story_outro: Ты снимаешь трафик из голой консоли. tcpdump твой. Впереди — финал «Арсенала».

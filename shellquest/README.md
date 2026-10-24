@@ -172,12 +172,32 @@ uses the exact same mechanics (quests, bosses, XP/coins, shop, validators).
 - Modules unlock linearly (`dN` needs `d(N-1)`'s boss defeated). A module's arena
   comes up for the whole module on `sq dlc start` and down on `sq dlc leave`.
 
-Shipped now: the foundation (track support, `sq dlc`, loader, schema, tests) and
-**module d1 «Разведка» (nmap)** end-to-end — five quests, the 3-phase boss
-«Картограф Арсенала», codex card, and the buildable `recon-net` arena (three
-`internal:true` targets alpha/beta/gamma with deterministic ports/services, built
-and smoke-tested by `scripts/verify-arenas.sh`). Modules d2–d10 + the finale reuse
-this template. Flags/answers ship **only as SHA-256**.
+Shipped now: the foundation (track support, `sq dlc`, loader, schema, tests) **and
+all ten modules d1–d10 plus the finale**, each with its quests, a 3-phase boss
+(4 for the finale), a codex card, setup/teardown, and — where applicable — a
+buildable `internal:true` arena. Flags/answers ship **only as SHA-256**; every
+answer is reproducible from a deterministic arena banner/route, a generated
+offline artifact, or documented training material. `scripts/regression.py` asserts
+every module (ids, phases, linear unlock d1→final, no plaintext leaks); the Docker
+arenas are built and smoke-tested by `scripts/verify-arenas.sh`.
+
+| # | Module | Tool(s) | Arena | Playable now |
+| --- | --- | --- | --- | --- |
+| d1 | Разведка | nmap | `recon-net` (3 hosts) | Docker: quests + answers; boss p2 pending-graded |
+| d2 | Трафик | Wireshark/tshark | offline `sample.pcap` + `chatter` | Offline+Docker: full (live-capture q05 documented) |
+| d3 | Веб-прокси | Burp Suite | `shopfront` | Docker: answers + flag; boss p1 (intercept) pending-graded |
+| d4 | Эксплуатация | Metasploit | `breach` (vsftpd 2.3.4) | Docker: recon answers + flag; boss p2 (session) pending-graded |
+| d5 | Пароли офлайн | John/Hashcat | offline hashes/shadow/wordlist | Offline: full real crack→flag; boss p1 (algo set) pending-graded |
+| d6 | Онлайн-вход | Hydra | `loginbox` (real sshd + HTTP form) | Docker: full real brute→flag |
+| d7 | SQL-инъекции | sqlmap | `dbshop` (real SQLite SQLi) | Docker: full real injection→flag |
+| d8 | Wi-Fi | Aircrack-ng | offline `capture.cap` + wordlist | Offline: ESSID real; handshake/key documented (no Wi-Fi in VM) |
+| d9 | Веб-recon | Nikto/gobuster/ffuf | `webmaze` | Docker: full real recon→flag |
+| d10 | Терминальный захват | tcpdump | `serverbox` | Docker: answers + flag; boss p1 (capture) pending-graded |
+| final | Полигон Архитектора | all | `proving-ground` + edge | Docker: recon + flag; web/password phases documented; hints off |
+
+"Pending-graded" phases mirror the main game: they return PENDING (not a false
+pass/fail) until `sq-helperd` grades the live arena; flag and answer phases work
+standalone.
 
 ## How it works (architecture)
 

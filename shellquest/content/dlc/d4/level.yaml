@@ -1,0 +1,19 @@
+id: 104
+dlc_id: d4
+track: dlc
+name: Эксплуатация
+target_commands:
+- msfconsole
+command_threshold: 0.8
+xp_required: 170
+shop:
+- name: metasploit-framework
+  package: metasploit-framework
+  price: 200
+  desc: 'Фреймворк эксплуатации: эксплойт → payload → сессия'
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Четвёртый стенд. Metasploit и уязвимый сервис breach (банер vsFTPd 2.3.4). Поймёшь, как уязвимость
+  превращается в доступ. Только учебный стенд.
+story_outro: Ты прошёл путь эксплойт→сессия→пост-эксплуатация. Metasploit твой. Дальше — пароли.

@@ -1,0 +1,14 @@
+id: d8-q02
+type: practice
+title: Есть ли хендшейк
+brief: 'Проверь, есть ли в дампе WPA handshake: sq answer <да/нет>.'
+requires_quests:
+- d8-q01
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: cdc5ed90cb4b9a7540b24d1c45c23c851930c98b07b6885667114c9f95fb0a12
+hints:
+- aircrack-ng покажет наличие рукопожатия.
+- Без него подбор невозможен (см. README).
+codex: codex/aircrack.md

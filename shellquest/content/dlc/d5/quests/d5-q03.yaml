@@ -1,0 +1,13 @@
+id: d5-q03
+type: practice
+title: Все хеши
+brief: Сколько хешей из hashes.txt удалось взломать? sq answer <N>.
+requires_quests:
+- d5-q02
+validators:
+- type: output_matches
+  answer_sha256: 4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a
+hints:
+- Тот же john по файлу.
+- john --show считает взломанные.
+codex: codex/john.md

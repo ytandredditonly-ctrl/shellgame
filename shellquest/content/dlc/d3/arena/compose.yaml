@@ -1,0 +1,13 @@
+# DLC d3 arena — shopfront. Single app node on an isolated network
+# (internal:true, no outbound). Brought up by sq-helperd on `sq dlc start d3`.
+name: sq-dlc-d3
+networks:
+  labnet:
+    internal: true
+services:
+  shopfront:
+    build: ./node
+    container_name: sq-d3-shopfront
+    hostname: shopfront
+    networks: { labnet: { aliases: [shopfront.lab] } }
+    expose: ["80"]

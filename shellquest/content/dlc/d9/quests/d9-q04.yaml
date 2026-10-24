@@ -1,0 +1,14 @@
+id: d9-q04
+type: practice
+title: Забытый файл
+brief: 'Найди забытый файл (robots.txt → .bak) и сдай токен из него: sq answer <токен>.'
+requires_quests:
+- d9-q03
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 4e8f26020f86dde27be6d19f165adf79b6b3b6ea3c5a8b561ea73f2760b50a3a
+hints:
+- robots.txt указывает на /backup; там secret.bak.
+- 'В secret.bak: DEV_NOTE backup-key-…'
+codex: codex/webrecon.md

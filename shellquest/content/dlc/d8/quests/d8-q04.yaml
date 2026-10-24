@@ -1,0 +1,14 @@
+id: d8-q04
+type: practice
+title: Почему WEP мёртв
+brief: 'Чем WPA2 принципиально сильнее WEP? sq answer <кратко>. (подсказка: что именно решается)'
+requires_quests:
+- d8-q03
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 6042fea5320b301f12ec8d634548897cb64e3b10103a13c9e710fac7d9763f1f
+hints:
+- Дело в управлении ключами и в IV.
+- 'Короткий ответ по сути: key management.'
+codex: codex/aircrack.md

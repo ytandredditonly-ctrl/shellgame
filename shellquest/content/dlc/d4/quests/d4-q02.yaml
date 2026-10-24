@@ -1,0 +1,17 @@
+id: d4-q02
+type: practice
+title: Найти модуль
+brief: 'По сервису стенда breach найди exploit-модуль и сдай его полное имя: sq answer <exploit/...>.'
+requires_quests:
+- d4-q01
+validators:
+- type: command_used
+  any_of:
+  - msfconsole
+- type: output_matches
+  ci: true
+  answer_sha256: 6b65ce1da8867160cf987394392e27f6bade1e648ac11ebaf236461118231f7e
+hints:
+- 'Определи версию службы (банер 21/tcp: vsFTPd 2.3.4).'
+- search vsftpd → колонка Name.
+codex: codex/metasploit.md

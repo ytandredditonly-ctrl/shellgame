@@ -1,0 +1,18 @@
+id: d2-q03
+type: practice
+title: Follow TCP stream
+brief: 'Собери HTTP-диалог и сдай путь запрошенной страницы: sq answer <path>.'
+requires_quests:
+- d2-q02
+validators:
+- type: command_used
+  any_of:
+  - tshark
+  - wireshark
+- type: output_matches
+  ci: true
+  answer_sha256: 7e93fba0bc7adda858a2500090e639e4f563a3965c7cf4c719fb56eb6b12c666
+hints:
+- ПКМ по пакету → Follow → TCP Stream.
+- Ищи строку GET <path>.
+codex: codex/wireshark.md

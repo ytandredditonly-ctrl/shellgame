@@ -185,6 +185,22 @@ the next `sq check`). `sq dlc` lists/enters modules (`dlc_available` gates on th
 Act-I boss, `dlc_module_unlocked` enforces linear order); the arena is raised on
 `sq dlc start` and lowered on `sq dlc leave`/victory via the same helper RPC.
 
+**All eleven modules are authored** (`content/dlc/d1…d10` + `final`), all on the
+d1 template and pure content — no engine/CLI/schema changes beyond the foundation.
+Each module ships `level.yaml` (tool shop item + price, `xp_required` ≤ its
+reachable XP, optional module `arena`), 4–6 quests, a boss (`d1…d10`: three phases
+= `output_matches` / `script` / `flag`; `final`: four phases, `hints_enabled:
+false`), a codex card, and idempotent setup/teardown under `~/sq-arsenal/dN`.
+Mandatory quests use only `command_used` + `output_matches`/`file_exists` so they
+complete standalone; arena-side grading (`script`) appears only in boss phases and
+returns PENDING (exit 2) until `sq-helperd` grades it — the same tier as the main
+game. Container arenas (`chatter`, `shopfront`, `breach`, `loginbox` with a real
+`sshd`, `dbshop` with a real SQLite SQLi, `webmaze`, `serverbox`, `proving-ground`)
+are buildable `internal:true` images; d5/d8 are host-local/offline, their artifacts
+(`hashes`/`shadow`/`wordlist`, `capture.cap`) generated deterministically by setup.
+Every answer is reproducible from an arena banner/route, a generated file, or
+documented training material; flags/answers are stored only as SHA-256.
+
 ---
 
 ## 6. Validators

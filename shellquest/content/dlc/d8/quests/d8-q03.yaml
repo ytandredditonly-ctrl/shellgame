@@ -1,0 +1,14 @@
+id: d8-q03
+type: practice
+title: Подобрать ключ
+brief: 'Подбери ключ словарём wordlist.txt и сдай его: sq answer <ключ>.'
+requires_quests:
+- d8-q02
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 040f4c812d026001c8e8bf2ae8ce5abded2aea644761f64458eee25a61742ab3
+hints:
+- aircrack-ng -w wordlist.txt capture.cap.
+- «KEY FOUND! [ ... ]» (ключ записан в README учебного образца).
+codex: codex/aircrack.md

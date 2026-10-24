@@ -1,0 +1,19 @@
+id: 103
+dlc_id: d3
+track: dlc
+name: Веб-прокси
+target_commands:
+- burpsuite
+command_threshold: 0.8
+xp_required: 150
+shop:
+- name: burpsuite
+  package: burpsuite
+  price: 150
+  desc: Перехватывающий HTTP-прокси (Community edition)
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Третий стенд. За ним — Burp Suite и уязвимое приложение shopfront. Научишься видеть и менять
+  HTTP между браузером и сервером. Только локальная арена.
+story_outro: Ты управляешь HTTP-запросом. Burp твой. Дальше — эксплуатация (Metasploit).

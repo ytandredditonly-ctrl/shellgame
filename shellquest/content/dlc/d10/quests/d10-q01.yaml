@@ -1,0 +1,12 @@
+id: d10-q01
+type: tutorial
+title: Первый дамп
+brief: Запусти tcpdump на интерфейсе и останови (Ctrl+C) — освой захват (это и есть задание).
+validators:
+- type: command_used
+  any_of:
+  - tcpdump
+hints:
+- sudo tcpdump -i <iface>.
+- Ctrl+C покажет «N packets captured».
+codex: codex/tcpdump.md

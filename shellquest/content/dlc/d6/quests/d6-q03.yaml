@@ -1,0 +1,14 @@
+id: d6-q03
+type: practice
+title: HTTP-форма
+brief: 'Подбери вход к HTTP-форме (порт 8080) и сдай валидную пару логин:пароль: sq answer <login:pass>.'
+requires_quests:
+- d6-q02
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 29fea2ddebd08ed73a0fe7952968ca60b9e56e678a367578825b6c4c8824d248
+hints:
+- http-post-form "/login:user=^USER^&pass=^PASS^:F=FAIL".
+- Признак неудачи — строка FAIL.
+codex: codex/hydra.md

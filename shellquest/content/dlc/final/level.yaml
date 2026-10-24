@@ -1,0 +1,16 @@
+id: 111
+dlc_id: final
+track: dlc
+name: Полигон Архитектора
+target_commands: []
+command_threshold: 0.0
+xp_required: 0
+shop: []
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: 'Финал «Арсенала». Один стенд proving-ground, где надо связать несколько инструментов курса
+  без пошаговых подсказок. Подсказки отключены — это проверка самостоятельности. Открой босса: sq check,
+  затем sq boss start.'
+story_outro: 'Ты собрал все десять инструментов Архитектора и прошёл его полигон. Титул «Арсенал освоен».
+  Эпилог: мастерская Архитектора теперь твоя.'

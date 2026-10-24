@@ -1,0 +1,32 @@
+id: d8-boss
+name: Эфир
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Сними сеть с дампа, подтверди рукопожатие и восстанови ключ.
+phases:
+- id: p1
+  brief: Сдай ESSID и BSSID из дампа (сверяется ареной).
+  validators:
+  - type: script
+    path: check-essid.py
+  hints:
+  - aircrack-ng capture.cap — ESSID и BSSID.
+  - Сверку делает sq-helperd.
+- id: p2
+  brief: Есть ли рукопожатие? sq answer <да/нет>.
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: cdc5ed90cb4b9a7540b24d1c45c23c851930c98b07b6885667114c9f95fb0a12
+  hints:
+  - aircrack-ng сообщает о handshake.
+  - См. README учебного образца.
+- id: p3
+  brief: 'Восстанови ключ и сдай его как флаг: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: 9c7f5981f8f8a67ab0e2e130804e6ef5bfd0c707fce24d389bcc9e6b3ce839f9
+  hints:
+  - Ключ из q03 — восстановленный пароль сети.
+  - Флаг модуля — ARS-WIFI-KEY.

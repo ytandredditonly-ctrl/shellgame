@@ -1,0 +1,18 @@
+id: d2-q02
+type: practice
+title: Фильтр протокола
+brief: 'Отфильтруй только DNS и сдай запрошенное доменное имя: sq answer <имя>.'
+requires_quests:
+- d2-q01
+validators:
+- type: command_used
+  any_of:
+  - tshark
+  - wireshark
+- type: output_matches
+  ci: true
+  answer_sha256: 706ecd962ef77e467f969f2f5978cce347d274439d2683412c6f640a1b722cad
+hints:
+- 'Дисплей-фильтр: dns.'
+- Поле Query Name (напр. tshark -r sample.pcap -Y dns).
+codex: codex/wireshark.md

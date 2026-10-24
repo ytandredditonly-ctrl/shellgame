@@ -1,0 +1,17 @@
+id: d7-q03
+type: practice
+title: Базы и таблицы
+brief: 'Через --tables найди таблицу пользователей и сдай её имя: sq answer <таблица>.'
+requires_quests:
+- d7-q02
+validators:
+- type: command_used
+  any_of:
+  - sqlmap
+- type: output_matches
+  ci: true
+  answer_sha256: 7dfb4cf67742cb0660305e56ef816c53fcec892cae7f6ee39b75f34e659d672c
+hints:
+- sqlmap ... --tables.
+- Ищи users/accounts.
+codex: codex/sqlmap.md

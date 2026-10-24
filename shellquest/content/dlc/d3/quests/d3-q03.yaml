@@ -1,0 +1,13 @@
+id: d3-q03
+type: practice
+title: Repeater
+brief: 'Через Repeater найди максимальное qty, которое сервер ещё принимает (OK): sq answer <N>.'
+requires_quests:
+- d3-q02
+validators:
+- type: output_matches
+  answer_sha256: 4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5
+hints:
+- ПКМ → Send to Repeater; меняй qty и Send.
+- Граница между OK и OUT_OF_STOCK.
+codex: codex/burpsuite.md

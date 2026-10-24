@@ -1,0 +1,13 @@
+# DLC d2 arena — chatter. Single app node on an isolated network
+# (internal:true, no outbound). Brought up by sq-helperd on `sq dlc start d2`.
+name: sq-dlc-d2
+networks:
+  labnet:
+    internal: true
+services:
+  chatter:
+    build: ./node
+    container_name: sq-d2-chatter
+    hostname: chatter
+    networks: { labnet: { aliases: [chatter.lab] } }
+    expose: ["8080"]

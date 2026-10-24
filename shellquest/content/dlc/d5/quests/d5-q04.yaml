@@ -1,0 +1,14 @@
+id: d5-q04
+type: practice
+title: Соль и скорость
+brief: В slowfast.txt сравни быстрый и медленный хеш — какой устоял (тип)? sq answer <тип>.
+requires_quests:
+- d5-q03
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 07eed1753dbd5fd2a0090465887cf4e788e874402f82d239400c99ce7a622d54
+hints:
+- Запусти john по slowfast.txt.
+- Солёный медленный $6$ (sha512crypt) не поддаётся словарю.
+codex: codex/john.md

@@ -1,0 +1,29 @@
+id: 109
+dlc_id: d9
+track: dlc
+name: Веб-recon
+target_commands:
+- nikto
+- gobuster
+- ffuf
+command_threshold: 0.8
+xp_required: 160
+shop:
+- name: nikto
+  package: nikto
+  price: 80
+  desc: Сканер веб-мисконфигов
+- name: gobuster
+  package: gobuster
+  price: 80
+  desc: Перебор директорий/файлов
+- name: ffuf
+  package: ffuf
+  price: 80
+  desc: Веб-фаззер (пути/параметры)
+arena: arena/compose.yaml
+setup: scripts/level-setup.sh
+teardown: scripts/level-teardown.sh
+story_intro: Девятый стенд. Три инструмента веб-разведки и лабиринт webmaze со скрытыми путями, параметрами
+  и забытыми файлами. Только локально.
+story_outro: Ты находишь спрятанное в вебе. Nikto/gobuster/ffuf твои. Дальше — терминальный захват.

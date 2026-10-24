@@ -1,0 +1,17 @@
+id: d10-q03
+type: practice
+title: Фильтр по хосту
+brief: 'Смотри трафик только с serverbox и сдай протокол прикладного уровня: sq answer <proto>.'
+requires_quests:
+- d10-q02
+validators:
+- type: command_used
+  any_of:
+  - tcpdump
+- type: output_matches
+  ci: true
+  answer_sha256: e0603c499aae47eb89343ad0ef3178e044c62e70ae2309b35591d1d49a3211ec
+hints:
+- tcpdump host serverbox.
+- Порт 80 → http.
+codex: codex/tcpdump.md

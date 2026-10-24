@@ -1,0 +1,16 @@
+id: d6-q04
+type: combo
+title: Упереться в защиту
+brief: 'Продолжи брут HTTP-формы и сдай HTTP-код, которым сервер ограничивает попытки: sq answer <код>.'
+requires_quests:
+- d6-q03
+validators:
+- type: command_used
+  any_of:
+  - hydra
+- type: output_matches
+  answer_sha256: 2d1007980f49215311f7f1012e84f99b801eb5daeca04dedea3ada41cc45353b
+hints:
+- После серии попыток сервер отвечает иначе.
+- Это код «слишком много запросов» — 429.
+codex: codex/hydra.md

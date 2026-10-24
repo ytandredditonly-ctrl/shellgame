@@ -1,0 +1,18 @@
+id: d2-q05
+type: combo
+title: Живой захват
+brief: 'Сними трафик, пока chatter шлёт данные, и сдай его токен (X-Feed): sq answer <токен>.'
+requires_quests:
+- d2-q04
+validators:
+- type: command_used
+  any_of:
+  - tshark
+  - wireshark
+- type: output_matches
+  ci: true
+  answer_sha256: 6c9728dc3fda98d922a6e84da0bd52149d7c8c75381fe4643502c6d18d732763
+hints:
+- Выбери интерфейс и запусти захват, пока chatter активен.
+- Токен виден в заголовке X-Feed / теле (см. README модуля).
+codex: codex/wireshark.md

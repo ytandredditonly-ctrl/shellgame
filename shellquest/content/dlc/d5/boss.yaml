@@ -1,0 +1,32 @@
+id: d5-boss
+name: Ключник
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: Опознай алгоритмы, сломай ключевой хеш и открой им защищённый файл.
+phases:
+- id: p1
+  brief: Опознай все алгоритмы в challenge.txt (сверяется ареной).
+  validators:
+  - type: script
+    path: check-algos.py
+  hints:
+  - hashid по каждой строке.
+  - Набор грейдит sq-helperd.
+- id: p2
+  brief: 'Сломай ключевой хеш key.hash и сдай пароль: sq answer <пароль>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: 203b70b5ae883932161bbd0bded9357e763e63afce98b16230be33f0b94c2cc5
+  hints:
+  - john --wordlist=wordlist.txt key.hash.
+  - Пароль есть в словаре.
+- id: p3
+  brief: 'Открой secret.enc этим паролем и сдай флаг: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: fbd97b11c4d6b839c7fc24dff0c8297659a287ee096e7aafb8750c073c517c5b
+  hints:
+  - openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:<пароль> -in secret.enc.
+  - Внутри — ARS-HASH-*.

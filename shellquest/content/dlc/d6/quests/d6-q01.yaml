@@ -1,0 +1,14 @@
+id: d6-q01
+type: tutorial
+title: Списки
+brief: 'Создай users.txt (один логин в строке) в папке модуля и сдай число паролей в wordlist.txt: sq
+  answer <N>.'
+validators:
+- type: file_exists
+  path: ~/sq-arsenal/d6/users.txt
+- type: output_matches
+  answer_sha256: 6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918
+hints:
+- echo admin > ~/sq-arsenal/d6/users.txt.
+- wc -l ~/sq-arsenal/d6/wordlist.txt.
+codex: codex/hydra.md

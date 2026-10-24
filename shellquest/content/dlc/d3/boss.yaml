@@ -1,0 +1,33 @@
+id: d3-boss
+name: Посредник
+arena: arena/compose.yaml
+time_limit: null
+hints_enabled: true
+hint_multiplier: 1.0
+story_brief: 'Стань посредником: перехвати, повтори, подмени — и войди в админку.'
+phases:
+- id: p1
+  brief: Перехвати и перешли модифицированный запрос (сверяется ареной).
+  validators:
+  - type: script
+    path: check-intercept.py
+  hints:
+  - Intercept on → правка → Forward.
+  - Арену грейдит sq-helperd по проксированному запросу.
+- id: p2
+  brief: 'Через Repeater найди код купона, открывающий скрытый раздел /deals: sq answer <код>.'
+  validators:
+  - type: output_matches
+    ci: true
+    answer_sha256: daf67b398fdde0e6ef764c7f9bd24c5c76814300ea9c0d140316879214161cca
+  hints:
+  - Шли /deals?code=… разными значениями.
+  - Код из набора ARSENAL*.
+- id: p3
+  brief: 'Подменой cookie role=admin войди в /admin и забери флаг: sq flag <значение>.'
+  validators:
+  - type: flag
+    sha256: 8b53f25db76673a415b0d7e71ffe99e6f366bb7a5210a5c7abdff6f9f6f38d1b
+  hints:
+  - GET /admin с cookie role=admin.
+  - Тело админки содержит ARS-BURP-*.

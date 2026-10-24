@@ -1,0 +1,14 @@
+id: d3-q02
+type: practice
+title: Изменить запрос
+brief: 'Перехвати POST /cart, поставь qty больше 10, перешли и сдай реакцию сервера: sq answer <ответ>.'
+requires_quests:
+- d3-q01
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: f542a04e591ce130bf0bbb379de1adb0e59be919e454380da84d79b89008352f
+hints:
+- Правь параметр qty в окне Intercept до Forward.
+- Смотри ответ в HTTP history.
+codex: codex/burpsuite.md

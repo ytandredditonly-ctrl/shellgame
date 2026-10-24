@@ -1,0 +1,15 @@
+id: d3-q01
+type: tutorial
+title: Поднять прокси
+brief: 'Настрой перехват (127.0.0.1:8080), поймай первый запрос формы и сдай его метод: sq answer <METHOD>.'
+validators:
+- type: command_used
+  any_of:
+  - burpsuite
+- type: output_matches
+  ci: true
+  answer_sha256: 72231043bc1807e6f740b235eb7511ecb33255a6a375435631196de8a9750d4b
+hints:
+- Proxy→Options; браузер на 127.0.0.1:8080; Intercept is on.
+- Форма корзины отправляется методом POST.
+codex: codex/burpsuite.md

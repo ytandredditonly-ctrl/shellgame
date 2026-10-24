@@ -1,0 +1,17 @@
+id: d10-q02
+type: practice
+title: Фильтр по порту
+brief: 'Лови только порт 80 на serverbox и сдай путь из HTTP-запроса: sq answer </путь>.'
+requires_quests:
+- d10-q01
+validators:
+- type: command_used
+  any_of:
+  - tcpdump
+- type: output_matches
+  ci: true
+  answer_sha256: ae4267a01f1269fbbf4824d26cf3bb22e8059a4797cc5bb46e43c40ff7ed090f
+hints:
+- tcpdump -A port 80.
+- Ищи строку GET <path>.
+codex: codex/tcpdump.md

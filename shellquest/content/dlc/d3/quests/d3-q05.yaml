@@ -1,0 +1,14 @@
+id: d3-q05
+type: combo
+title: Обойти проверку
+brief: 'Подмени cookie role=admin и открой корень; сдай приветствие сервера: sq answer <текст>.'
+requires_quests:
+- d3-q04
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: d69d39b67448d02d0ddcde9d1407d3df003a877922f87dbea3a7715a15e42e1e
+hints:
+- 'Клиентская валидация ≠ серверная: правь role в перехвате.'
+- GET / с cookie role=admin.
+codex: codex/burpsuite.md

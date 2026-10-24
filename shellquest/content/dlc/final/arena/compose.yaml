@@ -1,0 +1,21 @@
+# DLC finale arena — proving-ground. Web tier + an edge with an SSH banner and
+# a flag service, on an isolated network (internal:true, no outbound).
+name: sq-dlc-final
+networks:
+  labnet:
+    internal: true
+services:
+  proving-ground:
+    build: ./node
+    container_name: sq-final-web
+    hostname: proving-ground
+    networks: { labnet: { aliases: [proving-ground.lab] } }
+    expose: ["80"]
+  edge:
+    build: ./edge
+    container_name: sq-final-edge
+    hostname: edge
+    networks: { labnet: { aliases: [edge.lab] } }
+    environment:
+      SQ_PORTS: "22=ssh,7777=flag:ARS-PROVING-DONE"
+    expose: ["22", "7777"]

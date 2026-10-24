@@ -167,6 +167,61 @@ if dlc_mods:
     ok, _ = eng.switch_track("dlc")
     check("resume DLC restores d1 + its xp",
           ok and eng.level_id == 101 and db.profile()["level_xp"] == dlc_xp)
+
+    # -- «Арсенал» d2..d10 + finale (authored on top of the d1 template) --
+    EXPECT = {
+        "d1": 101, "d2": 102, "d3": 103, "d4": 104, "d5": 105, "d6": 106,
+        "d7": 107, "d8": 108, "d9": 109, "d10": 110, "final": 111,
+    }
+    ids = {m.dlc_id: m.id for m in dlc_mods}
+    check("all 11 DLC modules present (d1..d10 + final)", ids == EXPECT)
+    order = [m.dlc_id for m in dlc_mods]
+    check("DLC play order is d1..d10, final",
+          order == ["d1","d2","d3","d4","d5","d6","d7","d8","d9","d10","final"])
+    FLAGS = {
+        "d2-boss": "ARS-WIRE-DECODE", "d3-boss": "ARS-BURP-TAMPER",
+        "d4-boss": "ARS-MSF-SHELL", "d5-boss": "ARS-HASH-CRACK",
+        "d6-boss": "ARS-HYDRA-IN", "d7-boss": "ARS-SQLI-DUMP",
+        "d8-boss": "ARS-WIFI-KEY", "d9-boss": "ARS-RECON-HIDDEN",
+        "d10-boss": "ARS-TCPD-CATCH", "final-boss": "ARS-PROVING-DONE",
+    }
+    import hashlib as _hl
+    for m in dlc_mods:
+        b = m.boss
+        want_phases = 4 if m.dlc_id == "final" else 3
+        check(f"{m.dlc_id} boss has {want_phases} phases + xp reachable",
+              bool(b) and len(b.phases) == want_phases
+              and m.xp_required <= sum(q.xp for q in m.quests.values()) + 10 * len(m.target_commands))
+        if b and b.id in FLAGS:
+            last = b.phases[-1].validators[-1]
+            check(f"{m.dlc_id} boss final phase ships flag {FLAGS[b.id]} as sha256 only",
+                  last.get("type") == "flag"
+                  and last.get("sha256") == _hl.sha256(FLAGS[b.id].encode()).hexdigest()
+                  and "value" not in last)
+    check("finale hints disabled (self-reliance exam)",
+          c.module_by_dlc_id("final").boss.hints_enabled is False)
+
+    # Linear unlock across the whole track: beating dN's boss opens d(N+1) only.
+    dbL = fresh(); engL = Engine(dbL, c)
+    dbL.kv_set("boss_defeated_5", "1")   # Act-I gate
+    unlocked_now = [m.dlc_id for m in dlc_mods if engL.dlc_module_unlocked(m)]
+    check("only d1 unlocked at DLC entry", unlocked_now == ["d1"])
+    linear_ok = True
+    for i, m in enumerate(dlc_mods):
+        dbL.kv_set(f"boss_defeated_{m.id}", "1")
+        nxt = dlc_mods[i + 1] if i + 1 < len(dlc_mods) else None
+        if nxt and not engL.dlc_module_unlocked(nxt):
+            linear_ok = False
+    check("beating each boss unlocks the next, up to the finale", linear_ok)
+
+    # No plaintext answers/flags anywhere in shipped DLC YAML.
+    import glob
+    leak = []
+    for yf in glob.glob(os.path.join(ROOT, "content", "dlc", "**", "*.yaml"), recursive=True):
+        txt = open(yf, encoding="utf-8").read()
+        if "answer:" in txt or ('"value"' in txt) or ("value:" in txt and "flag" in txt):
+            leak.append(yf)
+    check("no plaintext answer:/value: flags in DLC YAML", not leak)
 else:
     check("DLC present (skipped — no dlc content)", True)
 

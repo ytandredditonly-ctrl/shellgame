@@ -1,0 +1,17 @@
+id: d9-q03
+type: practice
+title: Фаззинг параметра
+brief: 'ffuf найдёт скрытый GET-параметр на /p — сдай его имя: sq answer <param>.'
+requires_quests:
+- d9-q02
+validators:
+- type: command_used
+  any_of:
+  - ffuf
+- type: output_matches
+  ci: true
+  answer_sha256: 0b8e9e995d8d77f1e4770f0f79665aee6f3f70247b3735422daba73df4c3096f
+hints:
+- ffuf -u 'http://webmaze/p?FUZZ=1' -w <wordlist>.
+- Отличие по размеру/тексту ответа — параметр debug.
+codex: codex/webrecon.md

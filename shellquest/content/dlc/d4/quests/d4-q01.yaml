@@ -1,0 +1,12 @@
+id: d4-q01
+type: tutorial
+title: Консоль
+brief: Запусти msfconsole (это и есть задание — освойся в консоли).
+validators:
+- type: command_used
+  any_of:
+  - msfconsole
+hints:
+- 'Просто: msfconsole.'
+- 'Внутри полезно: version, help.'
+codex: codex/metasploit.md

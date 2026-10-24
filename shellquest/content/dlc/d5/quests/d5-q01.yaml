@@ -1,0 +1,12 @@
+id: d5-q01
+type: tutorial
+title: Опознать хеш
+brief: 'Определи алгоритм первого хеша в hashes.txt: sq answer <алгоритм>.'
+validators:
+- type: output_matches
+  ci: true
+  answer_sha256: 3ebff31b62c0637c54d4ffa990d5c100ea359994b35f4b342ff49797542148cd
+hints:
+- hashid '<hash>' или john покажет формат.
+- 32 hex-символа — это MD5.
+codex: codex/john.md

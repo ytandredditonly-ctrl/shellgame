@@ -1,0 +1,17 @@
+id: d7-q04
+type: combo
+title: Дамп данных
+brief: 'Выгрузи таблицу users (--dump) и сдай логин администратора: sq answer <login>.'
+requires_quests:
+- d7-q03
+validators:
+- type: command_used
+  any_of:
+  - sqlmap
+- type: output_matches
+  ci: true
+  answer_sha256: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+hints:
+- sqlmap ... -T users --dump.
+- Строка с ролью admin.
+codex: codex/sqlmap.md
