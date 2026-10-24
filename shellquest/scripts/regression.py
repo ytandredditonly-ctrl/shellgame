@@ -222,6 +222,49 @@ if dlc_mods:
         if "answer:" in txt or ('"value"' in txt) or ("value:" in txt and "flag" in txt):
             leak.append(yf)
     check("no plaintext answer:/value: flags in DLC YAML", not leak)
+
+    # Solvability: every stored answer/flag hash must be derivable from the
+    # shipped arenas/artifacts/docs (catches orphaned or typo'd hashes that a
+    # player could never satisfy). Harvest candidate plaintext from all DLC
+    # files + a small curated set of knowledge/verdict answers and login:pass
+    # pairs the tokenizer can't reconstruct, then confirm 0 unmatched.
+    import re as _re
+    CURATED = [
+        "POST", "GET", "vulnerable", "root", "key management", "да", "нет",
+        "OUT_OF_STOCK", "admin:letmein", "admin:provingpass", "provingpass",
+        "exploit/unix/ftp/vsftpd_234_backdoor",
+        "ARS-NMAP-MAP", "ARS-WIRE-DECODE", "ARS-BURP-TAMPER", "ARS-MSF-SHELL",
+        "ARS-HASH-CRACK", "ARS-HYDRA-IN", "ARS-SQLI-DUMP", "ARS-WIFI-KEY",
+        "ARS-RECON-HIDDEN", "ARS-TCPD-CATCH", "ARS-PROVING-DONE",
+    ] + [str(n) for n in range(0, 21)]
+    stored = []
+    for yf in glob.glob(os.path.join(ROOT, "content", "dlc", "**", "*.yaml"), recursive=True):
+        t = open(yf, encoding="utf-8").read()
+        for h in _re.findall(r'(?:answer_sha256|sha256):\s*"?([0-9a-f]{64})"?', t):
+            stored.append((os.path.relpath(yf), h))
+    cand = set(CURATED)
+    for f in glob.glob(os.path.join(ROOT, "content", "dlc", "**", "*"), recursive=True):
+        if not os.path.isfile(f):
+            continue
+        try:
+            data = open(f, encoding="utf-8", errors="ignore").read()
+        except OSError:
+            continue
+        for tok in _re.findall(r'[^\s"\',;]{1,48}', data):
+            cand.add(tok)
+            for sub in _re.split(r'[=/:,()\\.]', tok):
+                if sub:
+                    cand.add(sub)
+    import hashlib as _h2
+    hset = set()
+    for tk in cand:
+        hset.add(_h2.sha256(tk.encode()).hexdigest())
+        hset.add(_h2.sha256(tk.lower().encode()).hexdigest())
+    unmatched = [w for (w, h) in stored if h not in hset]
+    check(f"all {len(stored)} DLC answer/flag hashes are solvable (derivable from content)",
+          not unmatched)
+    if unmatched:
+        print("    orphaned hashes in:", unmatched)
 else:
     check("DLC present (skipped — no dlc content)", True)
 
