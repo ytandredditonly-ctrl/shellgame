@@ -65,6 +65,13 @@
     </div>
 
     <div class="col" id="rightcol">
+      <div class="submitbar">
+        <input id="subinput" class="subinput" placeholder="ответ или флаг…"
+               onkeydown="if(event.key==='Enter')SQ.submit('answer')">
+        <button class="act" onclick="SQ.submit('answer')">Ответ</button>
+        <button class="act" onclick="SQ.submit('flag')">Флаг</button>
+        <button class="act ghost" onclick="SQ.act('check')" title="sq check">Проверить</button>
+      </div>
       <div class="sec-title" style="padding-left:2px">Текущие задания</div>
       <div id="quests"></div>
     </div>

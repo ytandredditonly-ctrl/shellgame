@@ -59,13 +59,9 @@ const SQ = (() => {
     const txt = { locked: "Босс закрыт", unlocked: "⚔ Босс доступен",
       in_fight: `Бой идёт — фаза ${b.phase}/${b.phases_total}`, defeated: "✓ Босс повержен" };
     el.textContent = txt[b.state] || "Босс";
-    el.onclick = (b.state === "unlocked" || b.state === "in_fight")
-      ? () => bossInfo(b) : null;
-  }
-  function bossInfo(b) {
-    const cmd = b.state === "unlocked" ? "sq boss start" : "sq boss resume";
-    copy(cmd, `Скопировано: ${cmd}`);
-    if (b.brief) toast(b.name + ": " + b.brief, 3200);
+    el.onclick = b.state === "unlocked" ? () => { if (b.brief) toast(b.name + ": " + b.brief, 2600); act("boss_start"); }
+      : b.state === "in_fight" ? () => act("check")
+      : null;
   }
 
   function renderRing(s) {
@@ -124,12 +120,12 @@ const SQ = (() => {
     const label = { locked: " 🔒", defeated: " ✓", current: " ◂", unlocked: "" };
     box.innerHTML = mods.map(m => {
       const clickable = (m.state === "unlocked" || m.state === "current");
-      const onclick = clickable ? `onclick="SQ.copy('sq dlc start ${esc(m.dlc_id)}',this)"` : "";
+      const onclick = clickable ? `onclick="SQ.act('dlc_start',{module:'${esc(m.dlc_id)}'},this)"` : "";
       return `<span class="dnode ${m.state}" ${onclick}
-        title="${esc(m.name)}${clickable ? " — sq dlc start" : ""}">${esc(m.dlc_id)}${label[m.state] || ""}</span>`;
+        title="${esc(m.name)}${clickable ? " — войти" : ""}">${esc(m.dlc_id)}${label[m.state] || ""}</span>`;
     }).join("");
     if (s.track === "dlc") {
-      box.innerHTML += `<button class="cpy dlc-leave" onclick="SQ.copy('sq dlc leave',this)">sq dlc leave</button>`;
+      box.innerHTML += `<button class="act dlc-leave" onclick="SQ.act('dlc_leave',null,this)">← в основную игру</button>`;
     }
   }
 
@@ -160,12 +156,17 @@ const SQ = (() => {
       : q.status === "blocked" ? `ждёт: ${q.blocked_by.join(", ")}` : "выполнено ✓";
     const dots = q.validators.map(v => `<span class="dot2 ${v.pass ? "pass" : ""}" title="${esc(v.name)}"></span>`).join("");
     const nPass = q.validators.filter(v => v.pass).length;
-    let actions = `<button class="cpy" onclick="SQ.copy('sq quest ${q.id}',this)">sq quest ${q.id}</button>`;
+    let actions = "";
+    if (q.status === "available")
+      actions += `<button class="act ghost" onclick="SQ.act('check',null,this)">Проверить</button>`;
     if (q.status !== "done" && q.hints_total > 0) {
-      actions += `<button class="cpy" onclick="SQ.copy('sq hint ${q.id}',this)">sq hint ${q.id}</button>`;
-      if (q.next_hint_cost != null) actions += `<span class="hintcost">${q.next_hint_cost} ◈</span>`;
+      if (q.next_hint_cost != null)
+        actions += `<button class="act" onclick="SQ.act('hint',{id:'${esc(q.id)}'},this)">Подсказка (${q.hints_open + 1}/${q.hints_total}) ${q.next_hint_cost} ◈</button>`;
+      else
+        actions += `<button class="act" onclick="SQ.act('hint',{id:'${esc(q.id)}'},this)">Подсказки (все ${q.hints_total})</button>`;
     }
-    if (q.type === "flag") actions += `<span class="hintcost" style="color:var(--muted)">флаг: sq flag …</span>`;
+    if (q.type === "flag" || q.type === "combo")
+      actions += `<span class="hintcost" style="color:var(--muted)">ответ/флаг — в поле вверху</span>`;
     return `<div class="q ${q.status}">
       <h3>${esc(q.id)} — ${esc(q.title)} <span class="tag ${q.type}">${q.type}</span></h3>
       <div class="status">${stText} <span class="dots">${dots}</span>
@@ -221,6 +222,25 @@ const SQ = (() => {
     });
   }
 
+  // actions (the GUI's write path) -----------------------------------
+  function act(action, args, btn) {
+    if (btn) { btn.disabled = true; setTimeout(() => { btn.disabled = false; }, 600); }
+    return fetch("/api/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-SQ-GUI": "1" },
+      body: JSON.stringify({ action, args: args || {} }),
+    }).then(r => r.json()).then(d => {
+      toast((d.ok ? "" : "⚠ ") + (d.message || (d.ok ? "Готово" : "Не вышло")),
+            d.ok ? 2600 : 3400);
+      return d;
+    }).catch(() => toast("⚠ нет связи с игрой", 3000));
+  }
+  function submit(kind) {
+    const el = $("subinput"); const text = (el.value || "").trim();
+    if (!text) { el.focus(); return; }
+    act(kind, { text }).then(d => { if (d && d.ok) el.value = ""; });
+  }
+
   // utils -------------------------------------------------------------
   function copy(text, btnOrMsg) {
     const done = () => {
@@ -250,7 +270,6 @@ const SQ = (() => {
 
   document.addEventListener("keydown", (e) => { if (e.key === "F1") { e.preventDefault(); toggleManual(); } });
 
-  return { connect, reconnect: connect, copy, toggleManual, tab, filterCmds, openCodex, toggleDone,
-           bossInfo: () => {} };
+  return { connect, reconnect: connect, copy, act, submit, toggleManual, tab, filterCmds, openCodex, toggleDone };
 })();
 window.addEventListener("DOMContentLoaded", SQ.connect);

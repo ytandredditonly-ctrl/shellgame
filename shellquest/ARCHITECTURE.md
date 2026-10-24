@@ -334,16 +334,27 @@ never in scope.
 ## 12. The GUI (`gui.py`, `webui/`)
 
 `sq gui` starts a stdlib HTTP server on `127.0.0.1` and opens a dark
-single-page companion window. It is **read-only**: it renders the snapshot from
-`snapshot.py` and pushes updates over Server-Sent Events whenever a cheap
-`state_version` changes; buttons copy `sq …` commands to the clipboard rather
-than running them. It shows the top status bar, an XP ring with the two
-boss-unlock conditions, open-command chips, a 10-node world map, live quest
-cards with per-validator dots, and a sliding manual (How-to / Commands / Codex).
-If the game isn't initialised it shows a calm "no connection" screen.
+single-page companion window. It renders the snapshot from `snapshot.py` and
+pushes updates over Server-Sent Events whenever a cheap `state_version` changes.
+It shows the top status bar, an XP ring with the two boss-unlock conditions,
+open-command chips, a 10-node world map, the DLC «Арсенал» module strip, live
+quest cards with per-validator dots, and a sliding manual (How-to / Commands /
+Codex). If the game isn't initialised it shows a calm "no connection" screen.
+
+**Write path.** Game controls act for real through `POST /api/action`, which
+dispatches a **fixed whitelist** (`check`, `boss_start`/`boss_abort`, `hint`,
+`buy`, `dlc_start`/`dlc_leave`, `surprise_*`, `answer`/`flag`) to the very same
+`Engine`/`SurpriseEngine` calls the `sq` CLI uses — no shell, no arbitrary
+commands, every arg validated against content. It is bound to `127.0.0.1` and
+rejects cross-site/DNS-rebind calls: the handler requires a localhost `Host` and
+an `X-SQ-GUI: 1` header that a browser only attaches to same-origin `fetch`.
+The snapshot stays the single source of truth; after an action the SSE loop
+re-pushes the new state, so the page re-renders exactly as it does for a terminal
+command. The manual's reference command table still copies examples (documentation,
+not game state).
 
 Routes: `/` + assets, `/api/state`, `/api/stream` (SSE), `/api/codex?tool=`,
-`/api/manual`.
+`/api/manual`, `POST /api/action`.
 
 ---
 

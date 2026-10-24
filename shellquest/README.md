@@ -113,16 +113,24 @@ shutdown. While one is active the prompt shows a `!`.
 
 ### GUI companion window — `sq gui`
 
-A read-only companion window (GUI spec). `sq gui` starts a tiny local web
-server (stdlib only, no extra installs) on `127.0.0.1:8777` and opens it in your
-browser; keep it on a second monitor beside the terminal. It shows the level,
-XP ring, open-command chips, a 10-node world map, live quest cards (with
-per-validator progress dots), and a sliding manual panel (How-to / Commands /
-Codex). It **never mutates state** — buttons copy `sq …` commands to the
-clipboard for the terminal. Updates are pushed in real time over Server-Sent
-Events: finish a quest in the terminal and its card ticks over instantly. If the
-game isn't initialised yet it shows a calm "no connection — run `sq init`"
-screen. Flags: `sq gui --port <n>`, `sq gui --no-browser`.
+A companion window (GUI spec). `sq gui` starts a tiny local web server (stdlib
+only, no extra installs) on `127.0.0.1:8777` and opens it in your browser; keep
+it on a second monitor beside the terminal. It shows the level, XP ring,
+open-command chips, a 10-node world map, the DLC «Арсенал» module strip, live
+quest cards (with per-validator progress dots), and a sliding manual panel
+(How-to / Commands / Codex). Updates are pushed in real time over Server-Sent
+Events: finish a quest in the terminal and its card ticks over instantly.
+
+The game controls **act for real**: the answer/flag bar, per-quest Проверить
+and Подсказка buttons, the boss badge, and the DLC module buttons each call
+`POST /api/action`, which runs the *same* engine operation the `sq` CLI would —
+no shell, no arbitrary commands, just a fixed whitelist (check, boss, hint, buy,
+DLC switch, surprise, answer/flag). It is bound to `127.0.0.1` and guarded
+against cross-site/DNS-rebind calls (localhost `Host` + a required `X-SQ-GUI`
+header browsers only send same-origin); the manual's reference command table
+still copies examples to the clipboard. If the game isn't initialised yet it
+shows a calm "no connection — run `sq init`" screen. Flags: `sq gui --port <n>`,
+`sq gui --no-browser`.
 
 ### Helper, installs and arenas
 
