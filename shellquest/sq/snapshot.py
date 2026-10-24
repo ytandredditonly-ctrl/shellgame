@@ -25,7 +25,8 @@ def state_version(db) -> str:
     surprise = "1" if db.kv_get("surprise_active") else "0"
     if not p:
         return f"noprofile:{last_ev}"
-    return f"{p['level']}:{p['level_xp']}:{p['coins']}:{opened}:{p['boss_unlocked']}:{active}:{surprise}:{last_ev}"
+    track = db.kv_get("track", "main")
+    return f"{track}:{p['level']}:{p['level_xp']}:{p['coins']}:{opened}:{p['boss_unlocked']}:{active}:{surprise}:{last_ev}"
 
 
 def build(db, content) -> dict[str, Any]:
@@ -102,7 +103,8 @@ def build(db, content) -> dict[str, Any]:
                   "xp_required": xp_req, "xp_required_raw": level.xp_required,
                   "commands_open": open_count, "commands_target": len(targets),
                   "command_threshold": level.command_threshold,
-                  "story_intro": level.story_intro},
+                  "story_intro": level.story_intro,
+                  "is_dlc": level.is_dlc, "dlc_id": level.dlc_id},
         "coins": p["coins"],
         "boss": {"state": bstate, "phase": phase_idx, "phases_total": phases_total,
                  "name": level.boss.name if level.boss else None,
@@ -114,6 +116,16 @@ def build(db, content) -> dict[str, Any]:
         "quests": quests,
         "codex": codex,
         "surprise_active": bool(db.kv_get("surprise_active")),
+        "track": eng.active_track(),
+        "dlc_available": eng.dlc_available(),
+        "dlc": [
+            {"dlc_id": m.dlc_id, "name": m.name,
+             "state": ("current" if (eng.active_track() == "dlc" and m.id == level.id)
+                       else "defeated" if eng.boss_defeated(m.id)
+                       else "unlocked" if eng.dlc_module_unlocked(m)
+                       else "locked")}
+            for m in content.dlc_modules()
+        ],
         "xp_conditions": {
             "xp_ok": p["level_xp"] >= xp_req,
             "commands_ok": (open_count / max(1, len(targets))) >= level.command_threshold,
@@ -155,6 +167,7 @@ COMMANDS_TABLE = [
     ("sq hint <id>", "Купить следующую подсказку", "sq hint l4-q03"),
     ("sq codex [tool]", "Открытые утилиты или карточка одной", "sq codex ss"),
     ("sq boss start|resume|abort", "Управление боем с боссом", "sq boss start"),
+    ("sq dlc [start <m>|leave]", "DLC «Арсенал»: 10 инструментов ИБ (после ур.5)", "sq dlc start d1"),
     ("sq surprise [track]", "Ивент «Детская неожиданность»", "sq surprise crypto"),
     ("sq log", "История событий", "sq log"),
     ("sq pause | sq resume", "Выключить/включить отслеживание", "sq pause"),
@@ -169,4 +182,5 @@ HOWTO = [
     ("Монеты", "Тратятся в магазине (sq buy) на утилиты и на подсказки (sq hint). Опыт потратить нельзя."),
     ("Подсказки", "У задания 2–3 уровня подсказок: намёк → утилита → готовая команда. Купленная остаётся открытой."),
     ("Ивенты", "Иногда всплывает «Детская неожиданность» — короткая задачка. Реши её или сбрось: sq surprise drop."),
+    ("DLC «Арсенал»", "После босса уровня 5 открывается второй трек: 10 модулей по инструментам ИБ (nmap, Wireshark, Burp…). Вход: sq dlc start d1, выход: sq dlc leave. Прогресс и опыт у треков раздельные."),
 ]

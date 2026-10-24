@@ -21,7 +21,7 @@ phases:
       - {type: script, path: check-portmap.py}
     hints:
       - 'Пройди -sV по alpha, beta, gamma.'
-      - 'Эталон сверяет sq-helperd по известной карте recon-net.'
+      - 'Проверка сверяет карту портов живой recon-net.'
   - id: p3
     brief: 'На одном из хостов скан вскрывает маяк-флаг. Сдай его: sq flag <значение>.'
     validators:

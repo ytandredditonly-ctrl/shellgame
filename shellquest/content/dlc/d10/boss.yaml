@@ -13,7 +13,7 @@ phases:
     path: check-capture.py
   hints:
   - tcpdump port 80 -w файл.
-  - Наличие дампа грейдит sq-helperd.
+  - Проверка смотрит трафик нужной службы на serverbox.
 - id: p2
   brief: 'Извлеки переданный в открытую токен: sq answer <токен>.'
   validators:

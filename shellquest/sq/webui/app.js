@@ -33,7 +33,9 @@ const SQ = (() => {
     showApp(true);
     const L = s.level;
     // top bar
-    $("lvl").innerHTML = `УР. ${L.id} — <b>${esc(L.name)}</b>`;
+    $("lvl").innerHTML = L.is_dlc
+      ? `АРСЕНАЛ · ${esc(L.dlc_id)} — <b>${esc(L.name)}</b>`
+      : `УР. ${L.id} — <b>${esc(L.name)}</b>`;
     const pct = Math.min(100, 100 * L.xp / Math.max(1, L.xp_required));
     $("xpfill").style.width = pct + "%";
     $("xplabel").textContent = `${L.xp} / ${L.xp_required} XP`;
@@ -45,6 +47,7 @@ const SQ = (() => {
     renderRing(s);
     renderChips(s.commands);
     renderMap(s);
+    renderDlc(s);
     renderQuests(s);
     prev = s;
     firstRun = false;
@@ -104,6 +107,30 @@ const SQ = (() => {
       });
     });
     $("map").innerHTML = html;
+  }
+
+  function renderDlc(s) {
+    const card = $("dlccard"), box = $("dlc"), trk = $("dlctrack");
+    const mods = s.dlc || [];
+    if (!mods.length) { card.classList.add("hidden"); return; }
+    card.classList.remove("hidden");
+    if (!s.dlc_available) {
+      trk.textContent = "🔒 после ур.5";
+    } else if (s.track === "dlc") {
+      trk.innerHTML = `<span class="here">ты здесь</span>`;
+    } else {
+      trk.textContent = "доступен";
+    }
+    const label = { locked: " 🔒", defeated: " ✓", current: " ◂", unlocked: "" };
+    box.innerHTML = mods.map(m => {
+      const clickable = (m.state === "unlocked" || m.state === "current");
+      const onclick = clickable ? `onclick="SQ.copy('sq dlc start ${esc(m.dlc_id)}',this)"` : "";
+      return `<span class="dnode ${m.state}" ${onclick}
+        title="${esc(m.name)}${clickable ? " — sq dlc start" : ""}">${esc(m.dlc_id)}${label[m.state] || ""}</span>`;
+    }).join("");
+    if (s.track === "dlc") {
+      box.innerHTML += `<button class="cpy dlc-leave" onclick="SQ.copy('sq dlc leave',this)">sq dlc leave</button>`;
+    }
   }
 
   function renderQuests(s) {

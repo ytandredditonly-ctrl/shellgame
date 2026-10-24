@@ -12,7 +12,7 @@ phases:
     path: check-algos.py
   hints:
   - hashid по каждой строке.
-  - Набор грейдит sq-helperd.
+  - Проверка идёт по challenge.txt — опознай все четыре семейства хешей.
 - id: p2
   brief: 'Сломай ключевой хеш key.hash и сдай пароль: sq answer <пароль>.'
   validators:

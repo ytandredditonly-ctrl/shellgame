@@ -192,9 +192,15 @@ reachable XP, optional module `arena`), 4–6 quests, a boss (`d1…d10`: three 
 = `output_matches` / `script` / `flag`; `final`: four phases, `hints_enabled:
 false`), a codex card, and idempotent setup/teardown under `~/sq-arsenal/dN`.
 Mandatory quests use only `command_used` + `output_matches`/`file_exists` so they
-complete standalone; arena-side grading (`script`) appears only in boss phases and
-returns PENDING (exit 2) until `sq-helperd` grades it — the same tier as the main
-game. Container arenas (`chatter`, `shopfront`, `breach`, `loginbox` with a real
+complete standalone; arena-side grading (`script`) appears only in boss phases.
+Unlike the main game's placeholder stubs, the **DLC `script` graders are live**:
+each probes its running arena over Docker (`docker exec` into the arena net),
+and the offline modules parse the shipped artifact directly (d5 classifies the
+hash families in `challenge.txt`; d8 parses ESSID/BSSID from the `capture.cap`
+beacon). A grader returns `pass` only on the genuine success signal and `pending`
+(exit 2) otherwise — never a false pass/fail — so flag/answer phases always work
+standalone and `script` phases light up once the arena/artifact is present
+(`scripts/verify-arenas.sh` exercises every one). Container arenas (`chatter`, `shopfront`, `breach`, `loginbox` with a real
 `sshd`, `dbshop` with a real SQLite SQLi, `webmaze`, `serverbox`, `proving-ground`)
 are buildable `internal:true` images; d5/d8 are host-local/offline, their artifacts
 (`hashes`/`shadow`/`wordlist`, `capture.cap`) generated deterministically by setup.

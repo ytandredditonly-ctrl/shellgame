@@ -183,21 +183,30 @@ arenas are built and smoke-tested by `scripts/verify-arenas.sh`.
 
 | # | Module | Tool(s) | Arena | Playable now |
 | --- | --- | --- | --- | --- |
-| d1 | Разведка | nmap | `recon-net` (3 hosts) | Docker: quests + answers; boss p2 pending-graded |
-| d2 | Трафик | Wireshark/tshark | offline `sample.pcap` + `chatter` | Offline+Docker: full (live-capture q05 documented) |
-| d3 | Веб-прокси | Burp Suite | `shopfront` | Docker: answers + flag; boss p1 (intercept) pending-graded |
-| d4 | Эксплуатация | Metasploit | `breach` (vsftpd 2.3.4) | Docker: recon answers + flag; boss p2 (session) pending-graded |
-| d5 | Пароли офлайн | John/Hashcat | offline hashes/shadow/wordlist | Offline: full real crack→flag; boss p1 (algo set) pending-graded |
-| d6 | Онлайн-вход | Hydra | `loginbox` (real sshd + HTTP form) | Docker: full real brute→flag |
-| d7 | SQL-инъекции | sqlmap | `dbshop` (real SQLite SQLi) | Docker: full real injection→flag |
-| d8 | Wi-Fi | Aircrack-ng | offline `capture.cap` + wordlist | Offline: ESSID real; handshake/key documented (no Wi-Fi in VM) |
-| d9 | Веб-recon | Nikto/gobuster/ffuf | `webmaze` | Docker: full real recon→flag |
-| d10 | Терминальный захват | tcpdump | `serverbox` | Docker: answers + flag; boss p1 (capture) pending-graded |
-| final | Полигон Архитектора | all | `proving-ground` + edge | Docker: recon + flag; web/password phases documented; hints off |
+| d1 | Разведка | nmap | `recon-net` (3 hosts) | ✅ Docker: quests, answers, boss p2 port-map **live-graded**, flag |
+| d2 | Трафик | Wireshark/tshark | offline `sample.pcap` + `chatter` | ✅ Offline+Docker (live-capture q05 documented) |
+| d3 | Веб-прокси | Burp Suite | `shopfront` | ✅ Docker: answers, boss p1 tamper **live-graded**, flag |
+| d4 | Эксплуатация | Metasploit | `breach` (vsftpd 2.3.4) | ✅ Docker: answers, boss p2 session **live-graded**, flag |
+| d5 | Пароли офлайн | John/Hashcat | offline hashes/shadow/wordlist | ✅ Offline: real crack→flag, boss p1 algo-set **live-graded** |
+| d6 | Онлайн-вход | Hydra | `loginbox` (real sshd + HTTP form) | ✅ Docker: full real brute→flag |
+| d7 | SQL-инъекции | sqlmap | `dbshop` (real SQLite SQLi) | ✅ Docker: full real injection→flag |
+| d8 | Wi-Fi | Aircrack-ng | offline `capture.cap` + wordlist | ✅ Offline: ESSID/BSSID **live-graded** from the beacon; handshake/key documented (no Wi-Fi in VM) |
+| d9 | Веб-recon | Nikto/gobuster/ffuf | `webmaze` | ✅ Docker: full real recon→flag |
+| d10 | Терминальный захват | tcpdump | `serverbox` | ✅ Docker: answers, boss p1 capture **live-graded**, flag |
+| final | Полигон Архитектора | all | `proving-ground` + edge | ✅ Docker: recon + flag; web/password phases documented; hints off |
 
-"Pending-graded" phases mirror the main game: they return PENDING (not a false
-pass/fail) until `sq-helperd` grades the live arena; flag and answer phases work
-standalone.
+Every DLC boss phase is now either a standalone `flag`/`answer` or a **live
+`script` grader**: the grader probes the running arena over Docker (offline
+modules parse the shipped artifact directly), returns `pass` only on the genuine
+success signal, and falls back to `pending` — never a false pass/fail — when the
+arena/artifact is absent (`scripts/verify-arenas.sh` exercises all of them).
+
+**Documented VM limitations** (not shipped, by design): d2's optional live
+packet-capture (q05) and d8's optional monitor-mode live task need host hardware
+a training VM lacks, so the required path is the offline artifact; a WPA2 4-way
+handshake can't be synthesised, so d8's handshake/key are documented training
+values while the ESSID/BSSID are really parsed. d3's "preconfigured browser +
+proxy" is left to the player's Burp setup rather than automated.
 
 ## How it works (architecture)
 

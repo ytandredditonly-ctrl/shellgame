@@ -152,3 +152,17 @@ table.cmds td.ex{font-family:var(--mono);color:var(--muted)}
 .float-xp{position:absolute;right:12px;top:8px;color:var(--ok);font-family:var(--mono);font-size:12px;
   animation:floatup 1.1s ease forwards;pointer-events:none}
 @keyframes floatup{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-18px)}}
+
+/* DLC «Арсенал» strip (left column) */
+.dlc-track{font-family:var(--mono);font-size:10.5px;font-weight:400;color:var(--muted);margin-left:6px}
+.dlc-track .here{color:var(--warn)}
+.dlc{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.dnode{font-family:var(--mono);font-size:12px;padding:5px 9px;border-radius:7px;border:1px solid var(--border);
+  color:var(--dim);background:#0d141d;cursor:default;transition:all .15s;white-space:nowrap}
+.dnode.unlocked{color:var(--accent);border-color:var(--accent-dim);background:#0c1a1c;cursor:pointer}
+.dnode.unlocked:hover{border-color:var(--accent)}
+.dnode.current{color:var(--warn);border-color:var(--warn);background:#1a150c;cursor:pointer;
+  box-shadow:0 0 0 2px rgba(245,180,81,.12)}
+.dnode.defeated{color:var(--ok);border-color:var(--accent-dim);background:#0c1a14}
+.dnode.locked{opacity:.5}
+.dlc-leave{margin-left:auto}

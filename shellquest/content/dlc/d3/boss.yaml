@@ -13,7 +13,7 @@ phases:
     path: check-intercept.py
   hints:
   - Intercept on → правка → Forward.
-  - Арену грейдит sq-helperd по проксированному запросу.
+  - Проверка смотрит, проходит ли подменённый запрос в админку.
 - id: p2
   brief: 'Через Repeater найди код купона, открывающий скрытый раздел /deals: sq answer <код>.'
   validators:

@@ -12,7 +12,7 @@ phases:
     path: check-essid.py
   hints:
   - aircrack-ng capture.cap — ESSID и BSSID.
-  - Сверку делает sq-helperd.
+  - Проверка читает ESSID/BSSID прямо из capture.cap.
 - id: p2
   brief: Есть ли рукопожатие? sq answer <да/нет>.
   validators:

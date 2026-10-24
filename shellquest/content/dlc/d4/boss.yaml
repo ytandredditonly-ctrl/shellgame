@@ -22,7 +22,7 @@ phases:
     path: check-session.py
   hints:
   - set RHOSTS breach; run.
-  - Сессию грейдит sq-helperd.
+  - Проверка смотрит, открыта ли сессия на стенде breach.
 - id: p3
   brief: 'Забери флаг с хоста (бэкдор-шелл на 6200/tcp): sq flag <значение>.'
   validators:
